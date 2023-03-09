@@ -22,7 +22,7 @@ class ButtonAddWidget extends StatelessWidget {
               onPressed: function,
               backgroundColor: Colors.green,
               label: Text(infoText),
-              icon: const Icon(Icons.create),
+              icon: const Icon(Icons.add),
             ),
           ],
         ),

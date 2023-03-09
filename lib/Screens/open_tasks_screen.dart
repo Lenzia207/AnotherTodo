@@ -14,6 +14,7 @@ class OpenTasksScreen extends HookWidget {
       FirebaseFirestore.instance.collection('myTasks');
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+/*   final isDone = useState(false); */
 
   Future<void> createTask(BuildContext context,
       [DocumentSnapshot? documentSnapshot]) async {
@@ -50,9 +51,11 @@ class OpenTasksScreen extends HookWidget {
                     final navigatorPop = Navigator.of(context).pop();
                     final String title = titleController.text;
                     final String description = descriptionController.text;
-
-                    await myTasksDB
-                        .add({"title": title, "description": description});
+                    final bool = await myTasksDB.add({
+                      "title": title,
+                      "description": description,
+                      // "isDone": isDone,
+                    });
                     titleController.text = '';
                     descriptionController.text = '';
                     navigatorPop;
@@ -90,7 +93,7 @@ class OpenTasksScreen extends HookWidget {
                 ),
               ),
               ButtonAddWidget(
-                infoText: 'new task',
+                infoText: 'New Task',
                 function: (() => createTask(context)),
               ),
             ]),

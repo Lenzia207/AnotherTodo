@@ -1,3 +1,4 @@
+import 'package:another_todo/pages/detail_todo_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -19,8 +20,9 @@ class TodoItemWidget extends HookConsumerWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => Container() //DetailTodoPage(todo: todo),
-              ),
+            builder: (context) =>
+                DetailTodoPage(documentSnapshot: documentSnapshot),
+          ),
         );
       },
       child: Container(
@@ -56,7 +58,7 @@ class TodoItemWidget extends HookConsumerWidget {
                     ),
                 ],
               ),
-              /*  Checkbox(
+              /*   Checkbox(
                 activeColor: Theme.of(context).primaryColor,
                 checkColor: Colors.white,
                 value: documentSnapshot['isDone'],
