@@ -7,14 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_use/flutter_use.dart';
 
-/// This is the general representation of the [OpenTasksScreen]
-class OpenTasksScreen extends HookWidget {
-  OpenTasksScreen({super.key});
+/// This is the general representation of the [PrivateTasksScreen]
+class PrivateTasksScreen extends HookWidget {
+  PrivateTasksScreen({super.key});
 
   final myTasksDB = FirebaseFirestore.instance
       .collection('myTasks')
-      .where("isDone", isEqualTo: false)
-      .where('isPrivate', isEqualTo: false);
+      .where("isPrivate", isEqualTo: true);
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
@@ -38,7 +37,7 @@ class OpenTasksScreen extends HookWidget {
           if (streamSnapshot.data!.docs.isEmpty) {
             // Show a message if there is no data in the stream
             return const EmptyDataWidget(
-              infoText: 'You have no tasks open',
+              infoText: 'Empty',
             );
           } else {
             return Padding(

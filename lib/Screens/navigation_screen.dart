@@ -1,3 +1,5 @@
+import 'package:another_todo/Screens/completed_tasks_screen.dart';
+import 'package:another_todo/Screens/private_tasks_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -11,12 +13,8 @@ class MainNavigationScreen extends HookWidget {
 
   final pages = [
     OpenTasksScreen(),
-    const Center(
-      child: Text('Completed-Page in process...'),
-    ),
-    const Center(
-      child: Text('Private-Page in process...'),
-    ),
+    CompletedTasksScreen(),
+    PrivateTasksScreen(),
   ];
 
   // This widget is the root of your application.

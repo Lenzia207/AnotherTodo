@@ -18,7 +18,7 @@ class DetailHeaderTodoCard extends HookConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.all(0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 documentSnapshot['title'],
@@ -30,6 +30,16 @@ class DetailHeaderTodoCard extends HookConsumerWidget {
                   documentSnapshot['description'],
                   style: const TextStyle(fontSize: 15),
                 ),
+              Checkbox(
+                //title: const Text('Private'),
+                activeColor: Theme.of(context).primaryColor,
+                checkColor: Colors.white,
+                value: documentSnapshot['isPrivate'],
+                onChanged: (value) {
+                  final bool newValue = !documentSnapshot['isPrivate'];
+                  documentSnapshot.reference.update({'isPrivate': newValue});
+                },
+              ),
             ],
           ),
         ),

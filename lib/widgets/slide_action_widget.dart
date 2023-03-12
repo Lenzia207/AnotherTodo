@@ -1,7 +1,9 @@
+import 'package:another_todo/provider/edit_task_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_use/flutter_use.dart';
 
 import 'todo_item_widget.dart';
 
@@ -21,61 +23,6 @@ class SlideActionWidget extends HookWidget {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
-// Edit the tasks
-  Future<void> editTask(
-      BuildContext context, DocumentSnapshot? documentSnapshot) async {
-    if (documentSnapshot != null) {
-      titleController.text = documentSnapshot['title'];
-      descriptionController.text = documentSnapshot['description'];
-    }
-    await showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (BuildContext context) {
-          return Padding(
-            padding: EdgeInsets.only(
-                top: 20,
-                left: 20,
-                right: 20,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextField(
-                  controller: titleController,
-                  decoration: const InputDecoration(labelText: 'Title'),
-                ),
-                TextField(
-                  controller: descriptionController,
-                  decoration: const InputDecoration(
-                    labelText: 'Description',
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  child: const Text('Save'),
-                  onPressed: () async {
-                    final navigatorPop = Navigator.of(context).pop();
-                    final String title = titleController.text;
-                    final String description = descriptionController.text;
-
-                    await myTasksDB
-                        .doc(documentSnapshot!.id)
-                        .update({"title": title, "description": description});
-                    titleController.text = '';
-                    descriptionController.text = '';
-                    navigatorPop;
-                  },
-                )
-              ],
-            ),
-          );
-        });
-  }
-
 // Deletes the tasks and shows a SnackBar
   Future<void> deleteTask(BuildContext context, String myTaskId) async {
     await myTasksDB.doc(myTaskId).delete();
@@ -94,6 +41,19 @@ class SlideActionWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    //final isPrivate = useToggle(false);
+
+// Edit the tasks
+    Future<void> editTask(
+        BuildContext context, DocumentSnapshot? documentSnapshot) async {
+      await showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (BuildContext context) {
+            return UpdateTaskBottomSheet(documentSnapshot: documentSnapshot);
+          });
+    }
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: Slidable(

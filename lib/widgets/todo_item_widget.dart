@@ -3,8 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-/// The [TodoItemWidget] represents an Item of Tasks  that contains a title, description and checkbox
-// TODO Add Checkbox
+/// The [TodoItemWidget] represents an Item of Tasks that contains a title, description and checkbox
 
 class TodoItemWidget extends HookConsumerWidget {
   const TodoItemWidget({
@@ -58,12 +57,15 @@ class TodoItemWidget extends HookConsumerWidget {
                     ),
                 ],
               ),
-              /*   Checkbox(
+              Checkbox(
                 activeColor: Theme.of(context).primaryColor,
                 checkColor: Colors.white,
                 value: documentSnapshot['isDone'],
-                onChanged: (value) => null,
-              ), */
+                onChanged: (value) {
+                  final bool newValue = !documentSnapshot['isDone'];
+                  documentSnapshot.reference.update({'isDone': newValue});
+                },
+              ),
             ],
           ),
         ),
