@@ -1,7 +1,7 @@
 import 'package:another_todo/provider/create_sub_task_bottom_sheet.dart';
 import 'package:another_todo/widgets/button_add_widget.dart';
-import 'package:another_todo/widgets/detail_header_todo_card.dart';
-import 'package:another_todo/widgets/slide_action_widget.dart';
+import 'package:another_todo/widgets/task_item/detail_header_todo_card.dart';
+import 'package:another_todo/widgets/task_item/slide_action_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';

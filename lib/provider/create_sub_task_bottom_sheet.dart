@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_use/flutter_use.dart';
 
 class CreateSubTaskBottomSheet extends HookWidget {
   CreateSubTaskBottomSheet({super.key});
@@ -16,7 +15,6 @@ class CreateSubTaskBottomSheet extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isDone = useState(false);
-    //final isPrivate = useToggle(false);
 
     return Padding(
       padding: EdgeInsets.only(
@@ -38,24 +36,6 @@ class CreateSubTaskBottomSheet extends HookWidget {
               labelText: 'Description...',
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          /*  StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return CheckboxListTile(
-                activeColor: Theme.of(context).primaryColor,
-                title: const Text("Private Task"),
-                checkColor: Colors.white,
-                value: isPrivate.value,
-                onChanged: (value) {
-                  setState(
-                    () => isPrivate.toggle(),
-                  );
-                },
-              );
-            },
-          ), */
           ElevatedButton(
             child: const Text('Create sub task'),
             onPressed: () async {
@@ -69,7 +49,6 @@ class CreateSubTaskBottomSheet extends HookWidget {
                 "title": title,
                 "description": description,
                 "isDone": isDoneBool,
-                //"isPrivate": isPrivateBool,
               });
               titleController.text = '';
               descriptionController.text = '';

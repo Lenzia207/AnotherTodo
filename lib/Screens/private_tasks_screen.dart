@@ -1,13 +1,14 @@
 import 'package:another_todo/provider/create_task_bottom_sheet.dart';
 import 'package:another_todo/widgets/button_add_widget.dart';
 import 'package:another_todo/widgets/empty_data_widget.dart';
-import 'package:another_todo/widgets/slide_action_widget.dart';
+import 'package:another_todo/widgets/task_item/slide_action_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_use/flutter_use.dart';
 
 /// This is the general representation of the [PrivateTasksScreen]
+// TODO When item is completed (isDone = true) move it down at the end of the list
 class PrivateTasksScreen extends HookWidget {
   PrivateTasksScreen({super.key});
 
