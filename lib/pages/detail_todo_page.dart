@@ -22,6 +22,11 @@ class DetailTodoPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    /* final parentDocRef =
+        FirebaseFirestore.instance.collection('myTasks').doc(documentId);
+    final parentDocRef = collectionRef.doc(documentId); */
+    //final subcollectionRef = parentDocRef.collection('subcollectionName');
+
     final dataRange = useState(
       DateTimeRange(
         start: DateTime.now(),

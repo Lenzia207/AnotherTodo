@@ -1,3 +1,4 @@
+import 'package:another_todo/Screens/navigation_screen.dart';
 import 'package:another_todo/provider/create_task_bottom_sheet.dart';
 import 'package:another_todo/widgets/button_add_widget.dart';
 import 'package:another_todo/widgets/empty_data_widget.dart';
@@ -31,52 +32,67 @@ class PrivateTasksScreen extends HookWidget {
       );
     }
 
-    return StreamBuilder(
-      stream: myTasksDB.snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-        if (streamSnapshot.hasData) {
-          if (streamSnapshot.data!.docs.isEmpty) {
-            // Show a message if there is no data in the stream
-            return const EmptyDataWidget(
-              infoText: 'Empty',
-            );
-          } else {
-            return Padding(
-              padding: const EdgeInsets.only(
-                  top: 15, bottom: 20, left: 10, right: 10),
-              child: Stack(
-                alignment: AlignmentDirectional.topStart,
-                children: [
-                  SingleChildScrollView(
-                    child: ListView.separated(
-                      physics: const BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      separatorBuilder: (context, index) =>
-                          Container(height: 5),
-                      itemCount: streamSnapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        final DocumentSnapshot documentSnapshot =
-                            streamSnapshot.data!.docs[index];
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) {
+                return MainNavigationScreen();
+              },
+            ),
+          ),
+        ),
+        title: const Text('Private Tasks'),
+      ),
+      body: StreamBuilder(
+        stream: myTasksDB.snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+          if (streamSnapshot.hasData) {
+            if (streamSnapshot.data!.docs.isEmpty) {
+              // Show a message if there is no data in the stream
+              return const EmptyDataWidget(
+                infoText: 'Empty',
+              );
+            } else {
+              return Padding(
+                padding: const EdgeInsets.only(
+                    top: 15, bottom: 20, left: 10, right: 10),
+                child: Stack(
+                  alignment: AlignmentDirectional.topStart,
+                  children: [
+                    SingleChildScrollView(
+                      child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        separatorBuilder: (context, index) =>
+                            Container(height: 5),
+                        itemCount: streamSnapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final DocumentSnapshot documentSnapshot =
+                              streamSnapshot.data!.docs[index];
 
-                        return SlideActionWidget(
-                            documentSnapshot: documentSnapshot);
-                      },
+                          return SlideActionWidget(
+                              documentSnapshot: documentSnapshot);
+                        },
+                      ),
                     ),
-                  ),
-                  ButtonAddWidget(
-                    infoText: 'New Task',
-                    function: (() => createTask(context)),
-                  ),
-                ],
-              ),
-            );
+                    ButtonAddWidget(
+                      infoText: 'New Task',
+                      function: (() => createTask(context)),
+                    ),
+                  ],
+                ),
+              );
+            }
           }
-        }
 
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
     );
   }
 }
