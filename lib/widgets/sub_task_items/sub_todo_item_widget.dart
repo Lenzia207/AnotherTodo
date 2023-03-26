@@ -3,11 +3,10 @@ import 'package:another_todo/model/task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 /// The [SubTodoItemWidget] represents an Item of Tasks that contains a title, description and checkbox
-
-class SubTodoItemWidget extends HookConsumerWidget {
+class SubTodoItemWidget extends HookWidget {
   const SubTodoItemWidget({
     Key? key,
     required this.task,
@@ -17,7 +16,7 @@ class SubTodoItemWidget extends HookConsumerWidget {
   final Task task;
   final SubTask subTask;
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     // updates the value isDone
     void updateIsDone(String id, bool isDone) async {
       final mySubTasksDB = FirebaseFirestore.instance

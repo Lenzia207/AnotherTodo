@@ -1,3 +1,4 @@
+
 import 'package:another_todo/model/subTask.dart';
 import 'package:another_todo/model/task.dart';
 import 'package:another_todo/provider/create_sub_task_bottom_sheet.dart';
@@ -79,112 +80,123 @@ class DetailTodoPage extends HookWidget {
       appBar: AppBar(
         title: const Text("Details"),
       ),
-      body: StreamBuilder<List<SubTask>>(
-        stream: subTaskStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final subTasks = snapshot.data!;
-            return Padding(
-              padding: const EdgeInsets.only(
-                  top: 15, bottom: 20, left: 10, right: 10),
-              child: Stack(
+      body: Padding(
+        padding:
+            const EdgeInsets.only(top: 15, bottom: 20, left: 10, right: 10),
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DetailHeaderTodoCard(
+                        task: task,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 15,
+                          bottom: 20,
+                          left: 30,
+                          right: 30,
+                        ),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            DetailHeaderTodoCard(
-                              task: task,
+                            Text(
+                              "Start: $start",
+                              style: const TextStyle(
+                                  fontSize: 24, color: Colors.blue),
                             ),
+                            Text(
+                              "Deadline is: $end",
+                              style: const TextStyle(
+                                  fontSize: 24, color: Colors.blue),
+                            ),
+                            Text("Duration: ${duration.inDays} Day(s)"),
                             const SizedBox(
                               height: 10,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                top: 15,
-                                bottom: 20,
-                                left: 30,
-                                right: 30,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Start: $start",
-                                    style: const TextStyle(
-                                        fontSize: 24, color: Colors.blue),
-                                  ),
-                                  Text(
-                                    "Deadline is: $end",
-                                    style: const TextStyle(
-                                        fontSize: 24, color: Colors.blue),
-                                  ),
-                                  Text("Duration: ${duration.inDays} Day(s)"),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      ElevatedButton.icon(
-                                        onPressed: () =>
-                                            pickDateRanger(context),
-                                        icon: const Icon(Icons.date_range),
-                                        label: const Text("Set Date"),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: () => pickDateRanger(context),
+                                  icon: const Icon(Icons.date_range),
+                                  label: const Text("Set Date"),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                        const Divider(
-                          thickness: 2,
-                          color: Colors.black,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          child: Text(
-                            'Sub - Tasks'.toUpperCase(),
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        ListView.separated(
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          separatorBuilder: (context, index) =>
-                              Container(height: 7),
-                          itemCount: subTasks.length,
-                          itemBuilder: (context, index) {
-                            final subTask = subTasks[index];
-                            return SlideActionWidgetSubTask(
-                                task: task, subTask: subTask);
-                          },
-                        ),
-                        const SizedBox(
-                          height: 70,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  ButtonAddWidget(
-                    infoText: 'New Sub Task',
-                    function: (() => createSubTask(context)),
+                  // If Sub Collection is created then it will show the Sub Task Area
+                  StreamBuilder<List<SubTask>>(
+                    stream: subTaskStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.isEmpty) {
+                          // Show a message if there is no data in the stream
+                          return const SizedBox.shrink();
+                        } else {
+                          final subTasks = snapshot.data!;
+
+                          return Column(
+                            children: [
+                              const Divider(
+                                thickness: 2,
+                                color: Colors.black,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, bottom: 10),
+                                child: Text(
+                                  'Sub - Tasks'.toUpperCase(),
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              ListView.separated(
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                separatorBuilder: (context, index) =>
+                                    Container(height: 5),
+                                itemCount: subTasks.length,
+                                itemBuilder: (context, index) {
+                                  final subTask = subTasks[index];
+                                  return SlideActionWidgetSubTask(
+                                      task: task, subTask: subTask);
+                                },
+                              ),
+                              const SizedBox(
+                                height: 70,
+                              ),
+                            ],
+                          );
+                        }
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
                   ),
                 ],
               ),
-            );
-          }
-
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+            ),
+            ButtonAddWidget(
+              infoText: 'New Sub Task',
+              function: (() => createSubTask(context)),
+            ),
+          ],
+        ),
       ),
     );
   }

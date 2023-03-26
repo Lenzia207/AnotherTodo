@@ -1,9 +1,9 @@
 import 'package:another_todo/model/task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class DetailHeaderTodoCard extends HookConsumerWidget {
+class DetailHeaderTodoCard extends HookWidget {
   const DetailHeaderTodoCard({
     Key? key,
     required this.task,
@@ -11,7 +11,7 @@ class DetailHeaderTodoCard extends HookConsumerWidget {
 
   final Task task;
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     // updates the value isPrivate
     void updateIsPrivate(String id, bool isPrivate) async {
       final myTasksDB = FirebaseFirestore.instance.collection('myTasks');
