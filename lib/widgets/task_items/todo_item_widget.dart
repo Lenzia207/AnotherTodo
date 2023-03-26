@@ -55,9 +55,10 @@ class TodoItemWidget extends HookWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 22),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 22,
+                      ),
                     ),
 
                     //If there is a DESCRIPTION
@@ -66,7 +67,10 @@ class TodoItemWidget extends HookWidget {
                         task.description,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 20, height: 1.5),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          height: 1.5,
+                        ),
                       ),
                   ],
                 ),

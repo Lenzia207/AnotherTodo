@@ -1,4 +1,3 @@
-
 import 'package:another_todo/model/task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -27,17 +26,20 @@ class UpdateTaskBottomSheet extends HookWidget {
     }
     return Padding(
       padding: EdgeInsets.only(
-          top: 20,
-          left: 20,
-          right: 20,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+        top: 20,
+        left: 20,
+        right: 20,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextField(
             controller: titleController,
-            decoration: const InputDecoration(labelText: 'Title'),
+            decoration: const InputDecoration(
+              labelText: 'Title',
+            ),
           ),
           TextField(
             controller: descriptionController,
@@ -50,7 +52,9 @@ class UpdateTaskBottomSheet extends HookWidget {
           ),
           CheckboxListTile(
             activeColor: Theme.of(context).primaryColor,
-            title: const Text("Private Task"),
+            title: const Text(
+              'Private Task',
+            ),
             checkColor: Colors.white,
             value: isPrivate.value,
             onChanged: (value) {
@@ -58,7 +62,9 @@ class UpdateTaskBottomSheet extends HookWidget {
             },
           ),
           ElevatedButton(
-            child: const Text('Save'),
+            child: const Text(
+              'Save',
+            ),
             onPressed: () async {
               final navigatorPop = Navigator.of(context).pop();
               final String title = titleController.text;

@@ -19,9 +19,6 @@ class SlideActionWidgetSubTask extends HookWidget {
     required this.subTask,
   }) : super(key: key);
 
-  /*  final CollectionReference mySubTasksDB =
-      FirebaseFirestore.instance.collection('mySubTasks'); */
-
   final Task task;
   final SubTask subTask;
   final titleController = TextEditingController();

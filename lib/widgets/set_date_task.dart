@@ -13,7 +13,9 @@ class SetDateTask extends HookWidget {
       DateTimeRange(
         start: DateTime.now(),
         end: DateTime.now().add(
-          const Duration(days: 7),
+          const Duration(
+            days: 7,
+          ),
         ),
       ),
     );
@@ -29,8 +31,20 @@ class SetDateTask extends HookWidget {
       dataRange.value = newDateRange ?? dataRange.value;
     }
 
-    final start = formatDate(dataRange.value.start, [dd, '.', mm, ' ', yyyy]);
-    final end = formatDate(dataRange.value.end, [dd, '.', mm, ' ', yyyy]);
+    final start = formatDate(dataRange.value.start, [
+      dd,
+      '.',
+      mm,
+      ' ',
+      yyyy,
+    ]);
+    final end = formatDate(dataRange.value.end, [
+      dd,
+      '.',
+      mm,
+      ' ',
+      yyyy,
+    ]);
     final duration = dataRange.value.duration;
 
     return Padding(
@@ -45,11 +59,17 @@ class SetDateTask extends HookWidget {
         children: [
           Text(
             "Start: $start",
-            style: const TextStyle(fontSize: 24, color: Colors.blue),
+            style: const TextStyle(
+              fontSize: 24,
+              color: Colors.blue,
+            ),
           ),
           Text(
             "Deadline is: $end",
-            style: const TextStyle(fontSize: 24, color: Colors.blue),
+            style: const TextStyle(
+              fontSize: 24,
+              color: Colors.blue,
+            ),
           ),
           Text("Duration: ${duration.inDays} Day(s)"),
           const SizedBox(
@@ -61,7 +81,9 @@ class SetDateTask extends HookWidget {
               ElevatedButton.icon(
                 onPressed: () => pickDateRanger(context),
                 icon: const Icon(Icons.date_range),
-                label: const Text("Set Date"),
+                label: const Text(
+                  "Set Date",
+                ),
               ),
             ],
           ),

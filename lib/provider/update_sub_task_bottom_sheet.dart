@@ -48,7 +48,9 @@ class UpdateSubTaskBottomSheet extends HookWidget {
             height: 20,
           ),
           ElevatedButton(
-            child: const Text('Save'),
+            child: const Text(
+              'Save',
+            ),
             onPressed: () async {
               final navigatorPop = Navigator.of(context).pop();
               final String title = titleController.text;

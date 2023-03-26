@@ -22,17 +22,20 @@ class CreateTaskBottomSheet extends HookWidget {
 
     return Padding(
       padding: EdgeInsets.only(
-          top: 20,
-          left: 20,
-          right: 20,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+        top: 20,
+        left: 20,
+        right: 20,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextField(
             controller: titleController,
-            decoration: const InputDecoration(labelText: 'Title...'),
+            decoration: const InputDecoration(
+              labelText: 'Title...',
+            ),
           ),
           TextField(
             controller: descriptionController,
@@ -45,7 +48,9 @@ class CreateTaskBottomSheet extends HookWidget {
           ),
           CheckboxListTile(
             activeColor: Theme.of(context).primaryColor,
-            title: const Text("Private Task"),
+            title: const Text(
+              'Private Task',
+            ),
             checkColor: Colors.white,
             value: isPrivate.value,
             onChanged: (value) {
@@ -53,7 +58,9 @@ class CreateTaskBottomSheet extends HookWidget {
             },
           ),
           ElevatedButton(
-            child: const Text('Create new task'),
+            child: const Text(
+              'Create new task',
+            ),
             onPressed: () async {
               final navigatorPop = Navigator.of(context).pop();
               final String title = titleController.text;

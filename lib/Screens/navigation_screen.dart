@@ -14,13 +14,14 @@ class MainNavigationScreen extends HookWidget {
     const PassCodePrivatePage(),
   ];
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final selectedIndex = useState(0);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Another Todo'),
+        title: const Text(
+          'Another Todo',
+        ),
       ),
       body: pages[selectedIndex.value],
       bottomNavigationBar: BottomNavigationBar(

@@ -50,7 +50,9 @@ class SlideActionWidget extends HookWidget {
           // Show a new snackbar to inform the user that the task has been restored
           message.showSnackBar(
             const SnackBar(
-              duration: Duration(seconds: 2),
+              duration: Duration(
+                seconds: 2,
+              ),
               content: Text('Task Restored'),
             ),
           );
@@ -63,13 +65,14 @@ class SlideActionWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
 // Edit the tasks
-    Future<void> editTask(BuildContext context,
-        /* DocumentSnapshot? documentSnapshot */ Task task) async {
+    Future<void> editTask(BuildContext context, Task task) async {
       await showModalBottomSheet(
           isScrollControlled: true,
           context: context,
           builder: (BuildContext context) {
-            return UpdateTaskBottomSheet(task: task);
+            return UpdateTaskBottomSheet(
+              task: task,
+            );
           });
     }
 

@@ -17,13 +17,17 @@ class EmptySubTasksWidget extends StatelessWidget {
           color: Colors.black12,
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          padding: const EdgeInsets.only(
+            top: 10,
+            bottom: 10,
+          ),
           child: Text(
             'Sub - Tasks'.toUpperCase(),
             style: const TextStyle(
-                color: Colors.black12,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
+              color: Colors.black12,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         const Center(

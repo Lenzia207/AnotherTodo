@@ -97,8 +97,10 @@ class DetailTodoPage extends HookWidget {
                                 color: Colors.black,
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 10, bottom: 10),
+                                padding: const EdgeInsets.only(
+                                  top: 10,
+                                  bottom: 10,
+                                ),
                                 child: Text(
                                   'Sub - Tasks'.toUpperCase(),
                                   style: const TextStyle(

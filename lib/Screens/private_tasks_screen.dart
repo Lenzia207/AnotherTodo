@@ -45,7 +45,9 @@ class PrivateTasksScreen extends HookWidget {
             ),
           ),
         ),
-        title: const Text('Private Tasks'),
+        title: const Text(
+          'Private Tasks',
+        ),
       ),
       body: StreamBuilder(
         stream: tasksStream,
@@ -62,7 +64,11 @@ class PrivateTasksScreen extends HookWidget {
                   .toList();
               return Padding(
                 padding: const EdgeInsets.only(
-                    top: 15, bottom: 20, left: 10, right: 10),
+                  top: 15,
+                  bottom: 20,
+                  left: 10,
+                  right: 10,
+                ),
                 child: Stack(
                   alignment: AlignmentDirectional.topStart,
                   children: [
@@ -70,8 +76,9 @@ class PrivateTasksScreen extends HookWidget {
                       child: ListView.separated(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        separatorBuilder: (context, index) =>
-                            Container(height: 5),
+                        separatorBuilder: (context, index) => Container(
+                          height: 5,
+                        ),
                         itemCount: tasks.length,
                         itemBuilder: (context, index) {
                           final Task task = tasks[index];

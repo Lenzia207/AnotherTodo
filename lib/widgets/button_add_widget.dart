@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 /// This [ButtonAddWidget] is a button widgets that is placed at the bottom right.
 /// An info text to the button and function can be added
 class ButtonAddWidget extends StatelessWidget {
-  const ButtonAddWidget(
-      {Key? key, required this.infoText, required this.function})
-      : super(key: key);
+  const ButtonAddWidget({
+    Key? key,
+    required this.infoText,
+    required this.function,
+  }) : super(key: key);
 
   final String infoText;
   final Function() function;
