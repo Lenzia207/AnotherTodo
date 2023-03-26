@@ -1,3 +1,4 @@
+import 'package:another_todo/model/subTask.dart';
 import 'package:another_todo/model/task.dart';
 import 'package:another_todo/pages/detail_todo_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,9 +11,11 @@ class TodoItemWidget extends HookConsumerWidget {
   const TodoItemWidget({
     Key? key,
     required this.task,
+    this.subTask,
   }) : super(key: key);
 
   final Task task;
+  final SubTask? subTask;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // updates the value isDone
@@ -23,13 +26,15 @@ class TodoItemWidget extends HookConsumerWidget {
 
     return GestureDetector(
       onTap: () {
-        /*  Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                DetailTodoPage(documentSnapshot: documentSnapshot),
+            builder: (context) => DetailTodoPage(
+              task: task,
+              subTask: subTask,
+            ),
           ),
-        ); */
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(20),

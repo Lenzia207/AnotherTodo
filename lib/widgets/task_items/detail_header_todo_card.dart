@@ -1,3 +1,4 @@
+import 'package:another_todo/model/task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -5,12 +6,18 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class DetailHeaderTodoCard extends HookConsumerWidget {
   const DetailHeaderTodoCard({
     Key? key,
-    required this.documentSnapshot,
+    required this.task,
   }) : super(key: key);
 
-  final DocumentSnapshot documentSnapshot;
+  final Task task;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // updates the value isPrivate
+    void updateIsPrivate(String id, bool isPrivate) async {
+      final myTasksDB = FirebaseFirestore.instance.collection('myTasks');
+      await myTasksDB.doc(id).update({'isPrivate': isPrivate});
+    }
+
     return SizedBox(
       width: double.infinity,
       child: Card(
@@ -27,13 +34,13 @@ class DetailHeaderTodoCard extends HookConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                documentSnapshot['title'],
+                task.title,
                 style:
                     const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              if (documentSnapshot['description'] != null)
+              if (task.description != null)
                 Text(
-                  documentSnapshot['description'],
+                  task.description,
                   style: const TextStyle(fontSize: 15),
                 ),
               Row(
@@ -47,11 +54,10 @@ class DetailHeaderTodoCard extends HookConsumerWidget {
                     //title: const Text('Private'),
                     activeColor: Theme.of(context).primaryColor,
                     checkColor: Colors.white,
-                    value: documentSnapshot['isPrivate'],
+                    value: task.isPrivate,
                     onChanged: (value) {
-                      final bool newValue = !documentSnapshot['isPrivate'];
-                      documentSnapshot.reference
-                          .update({'isPrivate': newValue});
+                      final bool newValue = !task.isPrivate;
+                      updateIsPrivate(task.id, newValue);
                     },
                   ),
                 ],

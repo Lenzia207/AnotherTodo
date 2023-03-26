@@ -25,6 +25,6 @@ class Task {
         title = snapshot['title'],
         description = snapshot['description'],
         isDone = snapshot['isDone'] as bool,
-        isPrivate = snapshot['isDone'] as bool,
+        isPrivate = snapshot['isPrivate'] as bool,
         subTasks = [];
 }

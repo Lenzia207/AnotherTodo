@@ -1,70 +1,43 @@
-import 'dart:developer';
-
-import 'package:another_todo/main.dart';
 import 'package:another_todo/model/subTask.dart';
 import 'package:another_todo/model/task.dart';
 import 'package:another_todo/provider/create_sub_task_bottom_sheet.dart';
 import 'package:another_todo/widgets/button_add_widget.dart';
-import 'package:another_todo/widgets/task_item/detail_header_todo_card.dart';
-import 'package:another_todo/widgets/task_item/slide_action_widget.dart';
+import 'package:another_todo/widgets/task_items/detail_header_todo_card.dart';
+import 'package:another_todo/widgets/sub_task_items/slide_action_widget_sub_task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-CollectionReference myTasksDB =
-    FirebaseFirestore.instance.collection('myTasks');
-void loadSubTask(
-    Task myTasks, ValueChanged<List<SubTask>> onSubTasksLoaded) async {
-  try {
-    final QuerySnapshot<Map<String, dynamic>> subTaskQuery =
-        // referring to our Firebase Document "MyTasks"
-        // And then refer to the documents collection through id and get all sub-collections
-        await myTasksDB.doc(myTasks.id).collection('mySubTasks').get();
-
-    final subTasks = subTaskQuery.docs
-        .map((subTask) => SubTask.fromSnapshot(subTask))
-        .toList();
-
-    inspect("Sub Tasks here ${subTasks[0]}");
-  } catch (e) {}
-}
-
-Widget buildSubTasksList(List<SubTask> subTasks) {
-  return ListView.builder(
-    itemCount: subTasks.length,
-    itemBuilder: (context, index) {
-      return ListTile(
-        title: Text(subTasks[index].title),
-        subtitle: Text(subTasks[index].description),
-        trailing: Checkbox(
-          value: subTasks[index].isDone,
-          onChanged: (value) {
-            // Handle checkbox state change here
-          },
-        ),
-      );
-    },
-  );
-}
-
-class DetailTodoPage extends HookConsumerWidget {
+class DetailTodoPage extends HookWidget {
   DetailTodoPage({
     Key? key,
-    /*    required this.documentSnapshot, */ required this.myTasks,
+    required this.task,
+    this.subTask,
   }) : super(key: key);
 
-  /*  CollectionReference myTasksDB =
-      FirebaseFirestore.instance.collection('myTasks'); */
-
-/*   final DocumentSnapshot documentSnapshot; */
+  final Task task;
+  final SubTask? subTask;
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
-  final Task myTasks;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    Stream<List<SubTask>> useSubTaskStream(Task myTask) {
+      return useMemoized(() {
+        return FirebaseFirestore.instance
+            .collection('myTasks')
+            .doc(myTask.id)
+            .collection('mySubTasks')
+            .snapshots()
+            .map((querySnapshot) => querySnapshot.docs
+                .map((doc) => SubTask.fromSnapshot(doc))
+                .toList());
+      }, [myTask.id]);
+    }
+
+    final subTaskStream = useSubTaskStream(task);
+
     final dataRange = useState(
       DateTimeRange(
         start: DateTime.now(),
@@ -85,52 +58,32 @@ class DetailTodoPage extends HookConsumerWidget {
       dataRange.value = newDateRange ?? dataRange.value;
     }
 
-    Future<void> createTask(BuildContext context,
-        [DocumentSnapshot? documentSnapshot]) async {
+    Future<void> createSubTask(BuildContext context, [SubTask? subTask]) async {
       await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
         builder: (BuildContext context) {
-          return CreateSubTaskBottomSheet();
+          return CreateSubTaskBottomSheet(
+            task: task,
+            subTask: subTask,
+          );
         },
       );
     }
-
-    /* void loadSubTask(Task myTasks) async {
-      try {
-        final QuerySnapshot<Map<String, dynamic>> subTaskQuery =
-            // referring to our Firebase Document "MyTasks"
-            // And then refer to the documents collection through id and get all sub-collections
-            await myTasksDB.doc(myTasks.id).collection('mySubTasks').get();
-
-        final subTasks = subTaskQuery.docs
-            .map((subTask) => SubTask.fromSnapshot(subTask))
-            .toList();
-
-        inspect("Sub Tasks here ${subTasks[0]}");
-      } catch (e) {}
-    } */
 
     final start = formatDate(dataRange.value.start, [dd, '.', mm, ' ', yyyy]);
     final end = formatDate(dataRange.value.end, [dd, '.', mm, ' ', yyyy]);
     final duration = dataRange.value.duration;
 
-    final subTasks = useState<List<SubTask>>([]);
-
-    useEffect(() {
-      loadSubTask(myTasks, (loadedSubTasks) {
-        subTasks.value = loadedSubTasks;
-      });
-    }, []);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Details"),
       ),
-      body: StreamBuilder(
-        stream: myTasksDB.snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-          if (streamSnapshot.hasData) {
+      body: StreamBuilder<List<SubTask>>(
+        stream: subTaskStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final subTasks = snapshot.data!;
             return Padding(
               padding: const EdgeInsets.only(
                   top: 15, bottom: 20, left: 10, right: 10),
@@ -143,9 +96,9 @@ class DetailTodoPage extends HookConsumerWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            /* DetailHeaderTodoCard(
-                              documentSnapshot: documentSnapshot,
-                            ), */
+                            DetailHeaderTodoCard(
+                              task: task,
+                            ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -189,33 +142,39 @@ class DetailTodoPage extends HookConsumerWidget {
                             ),
                           ],
                         ),
+                        const Divider(
+                          thickness: 2,
+                          color: Colors.black,
+                        ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
                           child: Text(
                             'Sub - Tasks'.toUpperCase(),
                             style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        buildSubTasksList(subTasks.value),
-
-                        /*  ListView.separated(
+                        ListView.separated(
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
                           separatorBuilder: (context, index) =>
                               Container(height: 5),
-                          itemCount: streamSnapshot.data!.docs.length,
+                          itemCount: subTasks.length,
                           itemBuilder: (context, index) {
-                            return SlideActionWidget(
-                                documentSnapshot: documentSnapshot);
+                            final subTask = subTasks[index];
+                            return SlideActionWidgetSubTask(
+                                task: task, subTask: subTask);
                           },
-                        ), */
+                        ),
+                        const SizedBox(
+                          height: 70,
+                        ),
                       ],
                     ),
                   ),
                   ButtonAddWidget(
                     infoText: 'New Sub Task',
-                    function: (() => createTask(context)),
+                    function: (() => createSubTask(context)),
                   ),
                 ],
               ),
