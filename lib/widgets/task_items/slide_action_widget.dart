@@ -9,8 +9,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'todo_item_widget.dart';
 
 /// The [SlideActionWidget] is part of the [TodoItemWidget] and features Sliding inside the Todo-Item
-// TODO Add Snackbar and Undo function
-
 class SlideActionWidget extends HookWidget {
   SlideActionWidget({
     Key? key,
@@ -27,20 +25,39 @@ class SlideActionWidget extends HookWidget {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
-// Deletes the tasks and shows a SnackBar
+// Stores the tasks and shows a SnackBar to either delete it after seconds or undo
   Future<void> deleteTask(BuildContext context, String myTaskId) async {
+    final message = ScaffoldMessenger.of(context);
+
+    // Store the task locally before deleting it from Firestore
+    final DocumentSnapshot<Object?> taskSnapshot =
+        await myTasksDB.doc(myTaskId).get();
+    final Object? taskData = taskSnapshot.data();
+
+    // Final delete
     await myTasksDB.doc(myTaskId).delete();
-    /*  final message = ScaffoldMessenger.of(context);
 
     final snackBar = SnackBar(
-      duration: const Duration(seconds: 2),
-      content: const Text("Deleting Task..."),
+      duration: const Duration(seconds: 5),
+      content: const Text('Deleting Task...'),
       action: SnackBarAction(
         label: 'Undo',
-        onPressed: () {},
+        onPressed: () async {
+          if (taskData != null) {
+            await myTasksDB.doc(myTaskId).set(taskData);
+          }
+
+          // Show a new snackbar to inform the user that the task has been restored
+          message.showSnackBar(
+            const SnackBar(
+              duration: Duration(seconds: 2),
+              content: Text('Task Restored'),
+            ),
+          );
+        },
       ),
     );
-    message.showSnackBar(snackBar); */
+    message.showSnackBar(snackBar);
   }
 
   @override
