@@ -1,3 +1,4 @@
+import 'package:another_todo/model/task.dart';
 import 'package:another_todo/pages/detail_todo_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -8,21 +9,27 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class TodoItemWidget extends HookConsumerWidget {
   const TodoItemWidget({
     Key? key,
-    required this.documentSnapshot,
+    required this.task,
   }) : super(key: key);
 
-  final DocumentSnapshot documentSnapshot;
+  final Task task;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // updates the value isDone
+    void updateIsDone(String id, bool isDone) async {
+      final myTasksDB = FirebaseFirestore.instance.collection('myTasks');
+      await myTasksDB.doc(id).update({'isDone': isDone});
+    }
+
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        /*  Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) =>
                 DetailTodoPage(documentSnapshot: documentSnapshot),
           ),
-        );
+        ); */
       },
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -37,21 +44,21 @@ class TodoItemWidget extends HookConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //TITLE
-                    if (documentSnapshot['title'] != null)
-                      Text(
-                        documentSnapshot['title'],
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 22),
-                      ),
+
+                    Text(
+                      task.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 22),
+                    ),
 
                     //If there is a DESCRIPTION
-                    if (documentSnapshot['description'] != null)
+                    if (task.description != null)
                       Text(
-                        documentSnapshot['description'],
+                        task.description,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontSize: 20, height: 1.5),
@@ -62,10 +69,10 @@ class TodoItemWidget extends HookConsumerWidget {
               Checkbox(
                 activeColor: Theme.of(context).primaryColor,
                 checkColor: Colors.white,
-                value: documentSnapshot['isDone'],
+                value: task.isDone,
                 onChanged: (value) {
-                  final bool newValue = !documentSnapshot['isDone'];
-                  documentSnapshot.reference.update({'isDone': newValue});
+                  final bool newValue = !task.isDone;
+                  updateIsDone(task.id, newValue);
                 },
               ),
             ],

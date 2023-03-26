@@ -1,3 +1,4 @@
+import 'package:another_todo/model/task.dart';
 import 'package:another_todo/provider/edit_task_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +14,16 @@ import 'todo_item_widget.dart';
 class SlideActionWidget extends HookWidget {
   SlideActionWidget({
     Key? key,
-    required this.documentSnapshot,
+    // required this.documentSnapshot,
+    required this.task,
   }) : super(key: key);
 
   final CollectionReference myTasksDB =
       FirebaseFirestore.instance.collection('myTasks');
 
-  final DocumentSnapshot documentSnapshot;
+  final Task task;
+
+  //final DocumentSnapshot documentSnapshot;
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
@@ -44,13 +48,13 @@ class SlideActionWidget extends HookWidget {
     //final isPrivate = useToggle(false);
 
 // Edit the tasks
-    Future<void> editTask(
-        BuildContext context, DocumentSnapshot? documentSnapshot) async {
+    Future<void> editTask(BuildContext context,
+        /* DocumentSnapshot? documentSnapshot */ Task task) async {
       await showModalBottomSheet(
           isScrollControlled: true,
           context: context,
           builder: (BuildContext context) {
-            return UpdateTaskBottomSheet(documentSnapshot: documentSnapshot);
+            return UpdateTaskBottomSheet(task: task);
           });
     }
 
@@ -63,7 +67,7 @@ class SlideActionWidget extends HookWidget {
           children: [
             //EDIT Todo Item
             SlidableAction(
-              onPressed: ((context) => editTask(context, documentSnapshot)),
+              onPressed: ((context) => editTask(context, task)),
               icon: Icons.edit,
               foregroundColor: Colors.white,
               backgroundColor: Colors.green,
@@ -71,8 +75,7 @@ class SlideActionWidget extends HookWidget {
             ),
             //DELETE Todo Item
             SlidableAction(
-              onPressed: ((context) =>
-                  deleteTask(context, documentSnapshot.id)),
+              onPressed: ((context) => deleteTask(context, task.id)),
               icon: Icons.delete,
               foregroundColor: Colors.white,
               backgroundColor: Colors.red,
@@ -81,7 +84,7 @@ class SlideActionWidget extends HookWidget {
           ],
         ),
         child: TodoItemWidget(
-          documentSnapshot: documentSnapshot,
+          task: task,
         ),
       ),
     );

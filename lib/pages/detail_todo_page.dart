@@ -1,3 +1,8 @@
+import 'dart:developer';
+
+import 'package:another_todo/main.dart';
+import 'package:another_todo/model/subTask.dart';
+import 'package:another_todo/model/task.dart';
 import 'package:another_todo/provider/create_sub_task_bottom_sheet.dart';
 import 'package:another_todo/widgets/button_add_widget.dart';
 import 'package:another_todo/widgets/task_item/detail_header_todo_card.dart';
@@ -8,25 +13,58 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+CollectionReference myTasksDB =
+    FirebaseFirestore.instance.collection('myTasks');
+void loadSubTask(
+    Task myTasks, ValueChanged<List<SubTask>> onSubTasksLoaded) async {
+  try {
+    final QuerySnapshot<Map<String, dynamic>> subTaskQuery =
+        // referring to our Firebase Document "MyTasks"
+        // And then refer to the documents collection through id and get all sub-collections
+        await myTasksDB.doc(myTasks.id).collection('mySubTasks').get();
+
+    final subTasks = subTaskQuery.docs
+        .map((subTask) => SubTask.fromSnapshot(subTask))
+        .toList();
+
+    inspect("Sub Tasks here ${subTasks[0]}");
+  } catch (e) {}
+}
+
+Widget buildSubTasksList(List<SubTask> subTasks) {
+  return ListView.builder(
+    itemCount: subTasks.length,
+    itemBuilder: (context, index) {
+      return ListTile(
+        title: Text(subTasks[index].title),
+        subtitle: Text(subTasks[index].description),
+        trailing: Checkbox(
+          value: subTasks[index].isDone,
+          onChanged: (value) {
+            // Handle checkbox state change here
+          },
+        ),
+      );
+    },
+  );
+}
+
 class DetailTodoPage extends HookConsumerWidget {
   DetailTodoPage({
     Key? key,
-    required this.documentSnapshot,
+    /*    required this.documentSnapshot, */ required this.myTasks,
   }) : super(key: key);
 
-  final CollectionReference myTasksDB =
-      FirebaseFirestore.instance.collection('mySubTasks');
-  final DocumentSnapshot documentSnapshot;
+  /*  CollectionReference myTasksDB =
+      FirebaseFirestore.instance.collection('myTasks'); */
+
+/*   final DocumentSnapshot documentSnapshot; */
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  final Task myTasks;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    /* final parentDocRef =
-        FirebaseFirestore.instance.collection('myTasks').doc(documentId);
-    final parentDocRef = collectionRef.doc(documentId); */
-    //final subcollectionRef = parentDocRef.collection('subcollectionName');
-
     final dataRange = useState(
       DateTimeRange(
         start: DateTime.now(),
@@ -58,9 +96,32 @@ class DetailTodoPage extends HookConsumerWidget {
       );
     }
 
+    /* void loadSubTask(Task myTasks) async {
+      try {
+        final QuerySnapshot<Map<String, dynamic>> subTaskQuery =
+            // referring to our Firebase Document "MyTasks"
+            // And then refer to the documents collection through id and get all sub-collections
+            await myTasksDB.doc(myTasks.id).collection('mySubTasks').get();
+
+        final subTasks = subTaskQuery.docs
+            .map((subTask) => SubTask.fromSnapshot(subTask))
+            .toList();
+
+        inspect("Sub Tasks here ${subTasks[0]}");
+      } catch (e) {}
+    } */
+
     final start = formatDate(dataRange.value.start, [dd, '.', mm, ' ', yyyy]);
     final end = formatDate(dataRange.value.end, [dd, '.', mm, ' ', yyyy]);
     final duration = dataRange.value.duration;
+
+    final subTasks = useState<List<SubTask>>([]);
+
+    useEffect(() {
+      loadSubTask(myTasks, (loadedSubTasks) {
+        subTasks.value = loadedSubTasks;
+      });
+    }, []);
 
     return Scaffold(
       appBar: AppBar(
@@ -73,81 +134,88 @@ class DetailTodoPage extends HookConsumerWidget {
             return Padding(
               padding: const EdgeInsets.only(
                   top: 15, bottom: 20, left: 10, right: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Stack(
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DetailHeaderTodoCard(
-                        documentSnapshot: documentSnapshot,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 15,
-                          bottom: 20,
-                          left: 30,
-                          right: 30,
-                        ),
-                        child: Column(
+                  SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Start: $start",
-                              style: const TextStyle(
-                                  fontSize: 24, color: Colors.blue),
-                            ),
-                            Text(
-                              "Deadline is: $end",
-                              style: const TextStyle(
-                                  fontSize: 24, color: Colors.blue),
-                            ),
-                            Text("Duration: ${duration.inDays} Day(s)"),
+                            /* DetailHeaderTodoCard(
+                              documentSnapshot: documentSnapshot,
+                            ), */
                             const SizedBox(
                               height: 10,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                ElevatedButton.icon(
-                                  onPressed: () => pickDateRanger(context),
-                                  icon: const Icon(Icons.date_range),
-                                  label: const Text("Set Date"),
-                                ),
-                              ],
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 15,
+                                bottom: 20,
+                                left: 30,
+                                right: 30,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Start: $start",
+                                    style: const TextStyle(
+                                        fontSize: 24, color: Colors.blue),
+                                  ),
+                                  Text(
+                                    "Deadline is: $end",
+                                    style: const TextStyle(
+                                        fontSize: 24, color: Colors.blue),
+                                  ),
+                                  Text("Duration: ${duration.inDays} Day(s)"),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      ElevatedButton.icon(
+                                        onPressed: () =>
+                                            pickDateRanger(context),
+                                        icon: const Icon(Icons.date_range),
+                                        label: const Text("Set Date"),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  Stack(
-                    alignment: AlignmentDirectional.topStart,
-                    children: [
-                      SingleChildScrollView(
-                        child: ListView.separated(
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            'Sub - Tasks'.toUpperCase(),
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        buildSubTasksList(subTasks.value),
+
+                        /*  ListView.separated(
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
                           separatorBuilder: (context, index) =>
                               Container(height: 5),
                           itemCount: streamSnapshot.data!.docs.length,
                           itemBuilder: (context, index) {
-                            final DocumentSnapshot documentSnapshot =
-                                streamSnapshot.data!.docs[index];
-
                             return SlideActionWidget(
                                 documentSnapshot: documentSnapshot);
                           },
-                        ),
-                      ),
-                      ButtonAddWidget(
-                        infoText: 'New Sub Task',
-                        function: (() => createTask(context)),
-                      ),
-                    ],
+                        ), */
+                      ],
+                    ),
+                  ),
+                  ButtonAddWidget(
+                    infoText: 'New Sub Task',
+                    function: (() => createTask(context)),
                   ),
                 ],
               ),
@@ -160,57 +228,5 @@ class DetailTodoPage extends HookConsumerWidget {
         },
       ),
     );
-
-    /*   Padding(
-        padding:
-            const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-        child: Stack(
-          alignment: AlignmentDirectional.bottomEnd,
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DetailHeaderTodoCard(
-                    documentSnapshot: documentSnapshot,
-                  ),
-                  Text(
-                    "Start: $start",
-                    style: const TextStyle(fontSize: 24, color: Colors.blue),
-                  ),
-                  Text(
-                    "Deadline is: $end",
-                    style: const TextStyle(fontSize: 24, color: Colors.blue),
-                  ),
-                  Text("Time left: ${duration.inDays} Day's"),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () => pickDateRanger(context),
-                        icon: const Icon(Icons.date_range),
-                        label: const Text("Set Date"),
-                      ),
-                    ],
-                  ),
-                  const Divider(
-                    height: 50,
-                    thickness: 1.5,
-                  ),
-                  
-                ],
-              ),
-            ),
-            ButtonAddWidget(
-              infoText: ' Add Sub Task',
-              function: () {},
-            ),
-          ],
-        ),
-      ),
-    ); */
   }
 }
