@@ -6,7 +6,6 @@ import 'package:another_todo/model/subTask.dart';
 import 'package:another_todo/model/task.dart';
 
 /// The [TodoItemWidget] represents an Item of Tasks that contains a title, description and checkbox
-
 class TodoItemWidget extends HookWidget {
   const TodoItemWidget({
     Key? key,
@@ -21,7 +20,9 @@ class TodoItemWidget extends HookWidget {
     // updates the value isDone
     void updateIsDone(String id, bool isDone) async {
       final myTasksDB = FirebaseFirestore.instance.collection('myTasks');
-      await myTasksDB.doc(id).update({'isDone': isDone});
+      await myTasksDB.doc(id).update({
+        'isDone': isDone,
+      });
     }
 
     return GestureDetector(

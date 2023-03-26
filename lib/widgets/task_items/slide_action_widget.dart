@@ -1,11 +1,10 @@
 import 'package:another_todo/model/subTask.dart';
 import 'package:another_todo/model/task.dart';
-import 'package:another_todo/provider/edit_task_bottom_sheet.dart';
+import 'package:another_todo/provider/update_task_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_use/flutter_use.dart';
 
 import 'todo_item_widget.dart';
 
@@ -46,8 +45,6 @@ class SlideActionWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final isPrivate = useToggle(false);
-
 // Edit the tasks
     Future<void> editTask(BuildContext context,
         /* DocumentSnapshot? documentSnapshot */ Task task) async {

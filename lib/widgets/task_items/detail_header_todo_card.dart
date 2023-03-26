@@ -14,8 +14,13 @@ class DetailHeaderTodoCard extends HookWidget {
   Widget build(BuildContext context) {
     // updates the value isPrivate
     void updateIsPrivate(String id, bool isPrivate) async {
+      final nav = Navigator.pop(context);
       final myTasksDB = FirebaseFirestore.instance.collection('myTasks');
-      await myTasksDB.doc(id).update({'isPrivate': isPrivate});
+      await myTasksDB.doc(id).update({
+        'isPrivate': isPrivate,
+      });
+
+      nav;
     }
 
     return SizedBox(
@@ -47,11 +52,10 @@ class DetailHeaderTodoCard extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Private: ',
+                    'Private:',
                     style: TextStyle(fontSize: 18),
                   ),
                   Checkbox(
-                    //title: const Text('Private'),
                     activeColor: Theme.of(context).primaryColor,
                     checkColor: Colors.white,
                     value: task.isPrivate,

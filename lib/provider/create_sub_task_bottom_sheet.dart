@@ -61,15 +61,6 @@ class CreateSubTaskBottomSheet extends HookWidget {
               titleController.text = '';
               descriptionController.text = '';
               navigatorPop;
-
-              /*   await mySubTasksDB.add({
-                "title": title,
-                "description": description,
-                "isDone": isDoneBool,
-              });
-              titleController.text = '';
-              descriptionController.text = '';
-              navigatorPop; */
             },
           )
         ],

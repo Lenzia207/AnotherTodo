@@ -1,12 +1,12 @@
-
 import 'package:another_todo/model/subTask.dart';
 import 'package:another_todo/model/task.dart';
 import 'package:another_todo/provider/create_sub_task_bottom_sheet.dart';
 import 'package:another_todo/widgets/button_add_widget.dart';
+import 'package:another_todo/widgets/empty_sub_tasks_widget.dart';
+import 'package:another_todo/widgets/set_date_task.dart';
 import 'package:another_todo/widgets/task_items/detail_header_todo_card.dart';
 import 'package:another_todo/widgets/sub_task_items/slide_action_widget_sub_task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -39,26 +39,6 @@ class DetailTodoPage extends HookWidget {
 
     final subTaskStream = useSubTaskStream(task);
 
-    final dataRange = useState(
-      DateTimeRange(
-        start: DateTime.now(),
-        end: DateTime.now().add(
-          const Duration(days: 7),
-        ),
-      ),
-    );
-
-    Future pickDateRanger(context) async {
-      DateTimeRange? newDateRange = await showDateRangePicker(
-        context: context,
-        initialDateRange: dataRange.value,
-        firstDate: DateTime(1950),
-        lastDate: DateTime(2050),
-      );
-
-      dataRange.value = newDateRange ?? dataRange.value;
-    }
-
     Future<void> createSubTask(BuildContext context, [SubTask? subTask]) async {
       await showModalBottomSheet(
         isScrollControlled: true,
@@ -71,10 +51,6 @@ class DetailTodoPage extends HookWidget {
         },
       );
     }
-
-    final start = formatDate(dataRange.value.start, [dd, '.', mm, ' ', yyyy]);
-    final end = formatDate(dataRange.value.end, [dd, '.', mm, ' ', yyyy]);
-    final duration = dataRange.value.duration;
 
     return Scaffold(
       appBar: AppBar(
@@ -98,60 +74,26 @@ class DetailTodoPage extends HookWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 15,
-                          bottom: 20,
-                          left: 30,
-                          right: 30,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Start: $start",
-                              style: const TextStyle(
-                                  fontSize: 24, color: Colors.blue),
-                            ),
-                            Text(
-                              "Deadline is: $end",
-                              style: const TextStyle(
-                                  fontSize: 24, color: Colors.blue),
-                            ),
-                            Text("Duration: ${duration.inDays} Day(s)"),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                ElevatedButton.icon(
-                                  onPressed: () => pickDateRanger(context),
-                                  icon: const Icon(Icons.date_range),
-                                  label: const Text("Set Date"),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Set a date and deadline for main task
+                      const SetDateTask(),
                     ],
                   ),
-                  // If Sub Collection is created then it will show the Sub Task Area
+                  // If sub-collection is created --> show the sub task area
                   StreamBuilder<List<SubTask>>(
                     stream: subTaskStream,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!.isEmpty) {
-                          // Show a message if there is no data in the stream
-                          return const SizedBox.shrink();
+                          return const EmptySubTasksWidget();
                         } else {
                           final subTasks = snapshot.data!;
 
                           return Column(
                             children: [
                               const Divider(
-                                thickness: 2,
+                                indent: 20,
+                                endIndent: 20,
+                                thickness: 1.5,
                                 color: Colors.black,
                               ),
                               Padding(

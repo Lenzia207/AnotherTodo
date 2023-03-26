@@ -1,11 +1,15 @@
+import 'package:another_todo/model/task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_use/flutter_use.dart';
 
 class CreateTaskBottomSheet extends HookWidget {
-  CreateTaskBottomSheet({super.key});
+  CreateTaskBottomSheet({
+    Key? key,
+    this.task,
+  }) : super(key: key);
 
+  final Task? task;
   final CollectionReference myTasksDB =
       FirebaseFirestore.instance.collection('myTasks');
   final titleController = TextEditingController();
@@ -14,7 +18,7 @@ class CreateTaskBottomSheet extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isDone = useState(false);
-    final isPrivate = useToggle(false);
+    final isPrivate = useState(task?.isPrivate ?? false);
 
     return Padding(
       padding: EdgeInsets.only(
@@ -39,19 +43,13 @@ class CreateTaskBottomSheet extends HookWidget {
           const SizedBox(
             height: 20,
           ),
-          StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return CheckboxListTile(
-                activeColor: Theme.of(context).primaryColor,
-                title: const Text("Private Task"),
-                checkColor: Colors.white,
-                value: isPrivate.value,
-                onChanged: (value) {
-                  setState(
-                    () => isPrivate.toggle(),
-                  );
-                },
-              );
+          CheckboxListTile(
+            activeColor: Theme.of(context).primaryColor,
+            title: const Text("Private Task"),
+            checkColor: Colors.white,
+            value: isPrivate.value,
+            onChanged: (value) {
+              isPrivate.value = !isPrivate.value;
             },
           ),
           ElevatedButton(
