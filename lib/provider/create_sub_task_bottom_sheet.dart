@@ -1,7 +1,6 @@
 import 'package:another_todo/model/subTask.dart';
 import 'package:another_todo/model/task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -9,16 +8,11 @@ class CreateSubTaskBottomSheet extends HookWidget {
   CreateSubTaskBottomSheet({
     Key? key,
     required this.task,
-    required this.subTask,
+    this.subTask,
   }) : super(key: key);
 
-/*   final CollectionReference mySubTasksDB = FirebaseFirestore.instance
-      .collection('myTasks')
-      .doc()
-      .collection('mySubTasks'); */
-
-  final SubTask? subTask;
   final Task task;
+  final SubTask? subTask;
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 

@@ -22,13 +22,13 @@ class SlideActionWidgetSubTask extends HookWidget {
   /*  final CollectionReference mySubTasksDB =
       FirebaseFirestore.instance.collection('mySubTasks'); */
 
-  final SubTask subTask;
   final Task task;
+  final SubTask subTask;
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
 // Deletes the tasks and shows a SnackBar
-  Future<void> deleteTask(BuildContext context, String mySubTaskId) async {
+  Future<void> deleteSubTask(BuildContext context, String mySubTaskId) async {
     final mySubTasksDB = FirebaseFirestore.instance
         .collection('myTasks')
         .doc(task.id)
@@ -60,12 +60,12 @@ class SlideActionWidgetSubTask extends HookWidget {
   @override
   Widget build(BuildContext context) {
 // Edit the tasks
-    Future<void> editTask(BuildContext context, SubTask task) async {
+    Future<void> editSubTask(BuildContext context, SubTask subTask) async {
       await showModalBottomSheet(
           isScrollControlled: true,
           context: context,
           builder: (BuildContext context) {
-            return UpdateSubTaskBottomSheet(subTask: subTask);
+            return UpdateSubTaskBottomSheet(task: task, subTask: subTask);
           });
     }
 
@@ -78,7 +78,7 @@ class SlideActionWidgetSubTask extends HookWidget {
           children: [
             //EDIT Todo Item
             SlidableAction(
-              onPressed: ((context) => editTask(context, subTask)),
+              onPressed: ((context) => editSubTask(context, subTask)),
               icon: Icons.edit,
               foregroundColor: Colors.white,
               backgroundColor: Colors.green,
@@ -86,7 +86,7 @@ class SlideActionWidgetSubTask extends HookWidget {
             ),
             //DELETE Todo Item
             SlidableAction(
-              onPressed: ((context) => deleteTask(context, subTask.id)),
+              onPressed: ((context) => deleteSubTask(context, subTask.id)),
               icon: Icons.delete,
               foregroundColor: Colors.white,
               backgroundColor: Colors.red,

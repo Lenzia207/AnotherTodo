@@ -158,7 +158,7 @@ class DetailTodoPage extends HookWidget {
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
                           separatorBuilder: (context, index) =>
-                              Container(height: 5),
+                              Container(height: 7),
                           itemCount: subTasks.length,
                           itemBuilder: (context, index) {
                             final subTask = subTasks[index];

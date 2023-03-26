@@ -1,6 +1,7 @@
 import 'package:another_todo/model/subTask.dart';
 import 'package:another_todo/model/task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_use/flutter_use.dart';
@@ -10,12 +11,13 @@ import 'package:flutter_use/flutter_use.dart';
 class UpdateSubTaskBottomSheet extends HookWidget {
   UpdateSubTaskBottomSheet({
     Key? key,
+    required this.task,
     this.subTask,
   }) : super(key: key);
 
+  final Task task;
   final SubTask? subTask;
-  final CollectionReference myTasksDB =
-      FirebaseFirestore.instance.collection('mySubTasks');
+
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
@@ -55,13 +57,26 @@ class UpdateSubTaskBottomSheet extends HookWidget {
               final String title = titleController.text;
               final String description = descriptionController.text;
 
-              await myTasksDB.doc(subTask!.id).update({
-                "title": title,
-                "description": description,
-              });
-              titleController.text = '';
-              descriptionController.text = '';
-              navigatorPop;
+              final mySubTasksDB = FirebaseFirestore.instance
+                  .collection('myTasks')
+                  .doc(task.id)
+                  .collection('mySubTasks');
+              final subTaskRef = mySubTasksDB.doc(subTask!.id);
+              final subTaskSnapshot = await subTaskRef.get();
+
+              if (subTaskSnapshot.exists) {
+                await mySubTasksDB.doc(subTask!.id).update({
+                  "title": title,
+                  "description": description,
+                });
+                titleController.text = '';
+                descriptionController.text = '';
+                navigatorPop;
+              } else {
+                if (kDebugMode) {
+                  print("Sub Task doesn't exist and can't be updated");
+                }
+              }
             },
           )
         ],
