@@ -12,10 +12,6 @@ import 'package:flutter_use/flutter_use.dart';
 class OpenTasksScreen extends HookWidget {
   OpenTasksScreen({super.key});
 
-  /*  final myTasksDB = FirebaseFirestore.instance
-      .collection('myTasks')
-      .where("isDone", isEqualTo: false)
-      .where('isPrivate', isEqualTo: false); */
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
@@ -39,8 +35,7 @@ class OpenTasksScreen extends HookWidget {
 
     return StreamBuilder(
       stream: tasksStream,
-      builder: (context,
-          snapshot /* AsyncSnapshot<QuerySnapshot> streamSnapshot */) {
+      builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!.docs.isEmpty) {
             // Show a message if there is no data in the stream
@@ -66,8 +61,6 @@ class OpenTasksScreen extends HookWidget {
                       itemCount: tasks.length,
                       itemBuilder: (context, index) {
                         final task = tasks[index];
-                        /*  final DocumentSnapshot documentSnapshot =
-                            streamSnapshot.data!.docs[index]; */
 
                         return SlideActionWidget(task: task);
                       },
