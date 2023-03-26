@@ -76,28 +76,51 @@ class DetailTodoPage extends HookConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  DetailHeaderTodoCard(
-                    documentSnapshot: documentSnapshot,
-                  ),
-                  Text(
-                    "Start: $start",
-                    style: const TextStyle(fontSize: 24, color: Colors.blue),
-                  ),
-                  Text(
-                    "Deadline is: $end",
-                    style: const TextStyle(fontSize: 24, color: Colors.blue),
-                  ),
-                  Text("Duration: ${duration.inDays} Day(s)"),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ElevatedButton.icon(
-                        onPressed: () => pickDateRanger(context),
-                        icon: const Icon(Icons.date_range),
-                        label: const Text("Set Date"),
+                      DetailHeaderTodoCard(
+                        documentSnapshot: documentSnapshot,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 15,
+                          bottom: 20,
+                          left: 30,
+                          right: 30,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Start: $start",
+                              style: const TextStyle(
+                                  fontSize: 24, color: Colors.blue),
+                            ),
+                            Text(
+                              "Deadline is: $end",
+                              style: const TextStyle(
+                                  fontSize: 24, color: Colors.blue),
+                            ),
+                            Text("Duration: ${duration.inDays} Day(s)"),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: () => pickDateRanger(context),
+                                  icon: const Icon(Icons.date_range),
+                                  label: const Text("Set Date"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

@@ -16,9 +16,15 @@ class DetailHeaderTodoCard extends HookConsumerWidget {
       child: Card(
         elevation: 0,
         child: Padding(
-          padding: const EdgeInsets.all(0),
+          padding: const EdgeInsets.only(
+            top: 20,
+            bottom: 20,
+            left: 30,
+            right: 30,
+          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 documentSnapshot['title'],
@@ -30,15 +36,25 @@ class DetailHeaderTodoCard extends HookConsumerWidget {
                   documentSnapshot['description'],
                   style: const TextStyle(fontSize: 15),
                 ),
-              Checkbox(
-                //title: const Text('Private'),
-                activeColor: Theme.of(context).primaryColor,
-                checkColor: Colors.white,
-                value: documentSnapshot['isPrivate'],
-                onChanged: (value) {
-                  final bool newValue = !documentSnapshot['isPrivate'];
-                  documentSnapshot.reference.update({'isPrivate': newValue});
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Private: ',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Checkbox(
+                    //title: const Text('Private'),
+                    activeColor: Theme.of(context).primaryColor,
+                    checkColor: Colors.white,
+                    value: documentSnapshot['isPrivate'],
+                    onChanged: (value) {
+                      final bool newValue = !documentSnapshot['isPrivate'];
+                      documentSnapshot.reference
+                          .update({'isPrivate': newValue});
+                    },
+                  ),
+                ],
               ),
             ],
           ),

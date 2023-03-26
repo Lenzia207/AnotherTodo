@@ -31,31 +31,33 @@ class TodoItemWidget extends HookConsumerWidget {
           elevation: 0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //TITLE
-                  if (documentSnapshot['title'] != null)
-                    Text(
-                      documentSnapshot['title'],
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 22),
-                    ),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //TITLE
+                    if (documentSnapshot['title'] != null)
+                      Text(
+                        documentSnapshot['title'],
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 22),
+                      ),
 
-                  //If there is a DESCRIPTION
-                  if (documentSnapshot['description'] != null)
-                    Container(
-                      margin: const EdgeInsets.only(top: 4),
-                      child: Text(
+                    //If there is a DESCRIPTION
+                    if (documentSnapshot['description'] != null)
+                      Text(
                         documentSnapshot['description'],
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontSize: 20, height: 1.5),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
               Checkbox(
                 activeColor: Theme.of(context).primaryColor,
