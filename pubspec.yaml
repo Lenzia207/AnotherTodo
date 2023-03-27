@@ -21,7 +21,8 @@ dependencies:
   date_format: ^2.0.7
   passcode_screen: ^2.0.1
   flutter_lock_screen: ^2.0.1
-  easy_splash_screen:
+
+  animated_splash_screen: ^1.3.0
 
 
 

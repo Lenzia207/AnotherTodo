@@ -1,4 +1,4 @@
-import 'package:easy_splash_screen/easy_splash_screen.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -26,19 +26,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: EasySplashScreen(
-        durationInSeconds: 7,
-        futureNavigator: Future.value(
-          MainNavigationScreen(),
-        ),
-        backgroundColor: Colors.lightBlue,
-        logo: Image.asset(
+      home: AnimatedSplashScreen(
+        nextScreen: MainNavigationScreen(),
+        duration: 3000,
+        splash: Image.asset(
           'lib/images/logo_spsc.png',
-          width: 1200,
-          height: 1200,
         ),
-        logoWidth: 100,
-        showLoader: true,
+        backgroundColor: const Color.fromARGB(255, 243, 198, 16),
+        splashTransition: SplashTransition.fadeTransition,
+        splashIconSize: 250,
       ),
     );
   }
