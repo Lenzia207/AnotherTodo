@@ -75,12 +75,6 @@ class OpenTasksScreen extends HookWidget {
 
                             final task = tasks.removeAt(oldIndex);
                             tasks.insert(newIndex, task);
-                            for (int i = 0; i < tasks.length; i++) {
-                              FirebaseFirestore.instance
-                                  .collection('myTasks')
-                                  .doc(tasks[i].id)
-                                  .update({'id': i.toString()});
-                            }
                           });
                         }),
                         itemBuilder: (context, index) {
