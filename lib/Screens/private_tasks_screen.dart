@@ -62,6 +62,13 @@ class PrivateTasksScreen extends HookWidget {
               final tasks = snapshot.data!.docs
                   .map((doc) => Task.fromSnapshot(doc))
                   .toList();
+              // Sort private tasks based on isDone
+              // if isDone: true --> go down
+              tasks.sort((a, b) => a.isDone == b.isDone
+                  ? 0
+                  : a.isDone
+                      ? 1
+                      : -1);
               return Padding(
                 padding: const EdgeInsets.only(
                   top: 15,

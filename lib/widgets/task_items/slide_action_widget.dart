@@ -14,6 +14,7 @@ class SlideActionWidget extends HookWidget {
     Key? key,
     required this.task,
     this.subTask,
+    this.valueKey,
   }) : super(key: key);
 
   final CollectionReference myTasksDB =
@@ -21,6 +22,7 @@ class SlideActionWidget extends HookWidget {
 
   final Task task;
   final SubTask? subTask;
+  final Key? valueKey;
 
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -76,33 +78,35 @@ class SlideActionWidget extends HookWidget {
           });
     }
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: Slidable(
-        endActionPane: ActionPane(
-          dragDismissible: false,
-          motion: const DrawerMotion(),
-          children: [
-            //EDIT Todo Item
-            SlidableAction(
-              onPressed: ((context) => editTask(context, task)),
-              icon: Icons.edit,
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.green,
-              label: 'Edit',
-            ),
-            //DELETE Todo Item
-            SlidableAction(
-              onPressed: ((context) => deleteTask(context, task.id)),
-              icon: Icons.delete,
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.red,
-              label: 'Delete',
-            ),
-          ],
-        ),
-        child: TodoItemWidget(
-          task: task,
+    return SingleChildScrollView(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Slidable(
+          endActionPane: ActionPane(
+            dragDismissible: false,
+            motion: const DrawerMotion(),
+            children: [
+              //EDIT Todo Item
+              SlidableAction(
+                onPressed: ((context) => editTask(context, task)),
+                icon: Icons.edit,
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.green,
+                label: 'Edit',
+              ),
+              //DELETE Todo Item
+              SlidableAction(
+                onPressed: ((context) => deleteTask(context, task.id)),
+                icon: Icons.delete,
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.red,
+                label: 'Delete',
+              ),
+            ],
+          ),
+          child: TodoItemWidget(
+            task: task,
+          ),
         ),
       ),
     );

@@ -15,6 +15,7 @@ class TodoItemWidget extends HookWidget {
 
   final Task task;
   final SubTask? subTask;
+
   @override
   Widget build(BuildContext context) {
     // updates the value isDone

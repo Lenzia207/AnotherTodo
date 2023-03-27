@@ -88,6 +88,14 @@ class DetailTodoPage extends HookWidget {
                         } else {
                           final subTasks = snapshot.data!;
 
+                          // Sort sub-tasks based on isDone
+                          // if isDone: true --> go down
+                          subTasks.sort((a, b) => a.isDone == b.isDone
+                              ? 0
+                              : a.isDone
+                                  ? 1
+                                  : -1);
+
                           return Column(
                             children: [
                               const Divider(
