@@ -5,9 +5,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:another_todo/model/subTask.dart';
 import 'package:another_todo/model/task.dart';
 
-/// The [TodoItemWidget] represents an Item of Tasks that contains a title, description and checkbox
-class TodoItemWidget extends HookWidget {
-  const TodoItemWidget({
+/// The [TaskItemWidget] represents an Item of Tasks that contains a title, description and checkbox
+class TaskItemWidget extends HookWidget {
+  const TaskItemWidget({
     Key? key,
     required this.task,
     this.subTask,

@@ -1,12 +1,11 @@
 import 'package:another_todo/model/subTask.dart';
 import 'package:another_todo/model/task.dart';
-import 'package:another_todo/provider/update_task_bottom_sheet.dart';
+import 'package:another_todo/widgets/task_items/update_task_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
-import 'todo_item_widget.dart';
+import 'task_item_widget.dart';
 
 /// The [SlideActionWidget] is part of the [TodoItemWidget] and features Sliding inside the Todo-Item
 class SlideActionWidget extends HookWidget {
@@ -14,18 +13,14 @@ class SlideActionWidget extends HookWidget {
     Key? key,
     required this.task,
     this.subTask,
-    this.valueKey,
   }) : super(key: key);
 
-  final CollectionReference myTasksDB =
-      FirebaseFirestore.instance.collection('myTasks');
+  final CollectionReference myTasksDB = FirebaseFirestore.instance.collection(
+    'myTasks',
+  );
 
   final Task task;
   final SubTask? subTask;
-  final Key? valueKey;
-
-  final titleController = TextEditingController();
-  final descriptionController = TextEditingController();
 
 // Stores the tasks and shows a SnackBar to either delete it after seconds or undo
   Future<void> deleteTask(BuildContext context, String myTaskId) async {
@@ -41,7 +36,9 @@ class SlideActionWidget extends HookWidget {
 
     final snackBar = SnackBar(
       duration: const Duration(seconds: 5),
-      content: const Text('Deleting Task...'),
+      content: const Text(
+        'Deleting Task...',
+      ),
       action: SnackBarAction(
         label: 'Undo',
         onPressed: () async {
@@ -88,7 +85,10 @@ class SlideActionWidget extends HookWidget {
             children: [
               //EDIT Todo Item
               SlidableAction(
-                onPressed: ((context) => editTask(context, task)),
+                onPressed: ((context) => editTask(
+                      context,
+                      task,
+                    )),
                 icon: Icons.edit,
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.green,
@@ -96,7 +96,10 @@ class SlideActionWidget extends HookWidget {
               ),
               //DELETE Todo Item
               SlidableAction(
-                onPressed: ((context) => deleteTask(context, task.id)),
+                onPressed: ((context) => deleteTask(
+                      context,
+                      task.id,
+                    )),
                 icon: Icons.delete,
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.red,
@@ -104,7 +107,7 @@ class SlideActionWidget extends HookWidget {
               ),
             ],
           ),
-          child: TodoItemWidget(
+          child: TaskItemWidget(
             task: task,
           ),
         ),

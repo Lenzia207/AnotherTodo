@@ -1,8 +1,7 @@
 import 'package:another_todo/model/subTask.dart';
 import 'package:another_todo/model/task.dart';
-import 'package:another_todo/provider/create_sub_task_bottom_sheet.dart';
-import 'package:another_todo/widgets/button_add_widget.dart';
-import 'package:another_todo/widgets/empty_sub_tasks_widget.dart';
+import 'package:another_todo/widgets/sub_task_items/button_create_sub_task_widget.dart';
+import 'package:another_todo/widgets/sub_task_items/empty_sub_tasks_widget.dart';
 import 'package:another_todo/widgets/set_date_task.dart';
 import 'package:another_todo/widgets/task_items/detail_header_todo_card.dart';
 import 'package:another_todo/widgets/sub_task_items/slide_action_widget_sub_task.dart';
@@ -24,6 +23,7 @@ class DetailTodoPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    // gets the sub task in the task.id and maps in the task snapshot through the subTask-List
     Stream<List<SubTask>> useSubTaskStream(Task myTask) {
       return useMemoized(() {
         return FirebaseFirestore.instance
@@ -38,19 +38,6 @@ class DetailTodoPage extends HookWidget {
     }
 
     final subTaskStream = useSubTaskStream(task);
-
-    Future<void> createSubTask(BuildContext context, [SubTask? subTask]) async {
-      await showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (BuildContext context) {
-          return CreateSubTaskBottomSheet(
-            task: task,
-            subTask: subTask,
-          );
-        },
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -75,7 +62,9 @@ class DetailTodoPage extends HookWidget {
                         height: 10,
                       ),
                       // Set a date and deadline for main task
-                      const SetDateTask(),
+                      SetDateTask(
+                        task: task,
+                      ),
                     ],
                   ),
                   // If sub-collection is created --> show the sub task area
@@ -90,11 +79,13 @@ class DetailTodoPage extends HookWidget {
 
                           // Sort sub-tasks based on isDone
                           // if isDone: true --> go down
-                          subTasks.sort((a, b) => a.isDone == b.isDone
-                              ? 0
-                              : a.isDone
-                                  ? 1
-                                  : -1);
+                          subTasks.sort(
+                            (a, b) => a.isDone == b.isDone
+                                ? 0
+                                : a.isDone
+                                    ? 1
+                                    : -1,
+                          );
 
                           return Column(
                             children: [
@@ -125,7 +116,9 @@ class DetailTodoPage extends HookWidget {
                                 itemBuilder: (context, index) {
                                   final subTask = subTasks[index];
                                   return SlideActionWidgetSubTask(
-                                      task: task, subTask: subTask);
+                                    task: task,
+                                    subTask: subTask,
+                                  );
                                 },
                               ),
                               const SizedBox(
@@ -143,9 +136,9 @@ class DetailTodoPage extends HookWidget {
                 ],
               ),
             ),
-            ButtonAddWidget(
+            ButtonCreateSubTaskWidget(
+              task: task,
               infoText: 'New Sub Task',
-              function: (() => createSubTask(context)),
             ),
           ],
         ),

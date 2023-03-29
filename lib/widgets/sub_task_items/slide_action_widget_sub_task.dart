@@ -1,57 +1,78 @@
 import 'package:another_todo/model/subTask.dart';
 import 'package:another_todo/model/task.dart';
-import 'package:another_todo/provider/update_sub_task_bottom_sheet.dart';
 import 'package:another_todo/widgets/sub_task_items/sub_todo_item_widget.dart';
+import 'package:another_todo/widgets/sub_task_items/update_sub_task_bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_use/flutter_use.dart';
 
 /// The [SlideActionWidgetSubTask] is part of the [SubTodoItemWidget] and features Sliding inside the Todo-Item
-// TODO Add Snackbar and Undo function
-
 class SlideActionWidgetSubTask extends HookWidget {
-  SlideActionWidgetSubTask({
-    Key? key,
+  const SlideActionWidgetSubTask({
+    Key? valueKey,
     required this.task,
     required this.subTask,
-  }) : super(key: key);
+  }) : super(key: valueKey);
 
   final Task task;
   final SubTask subTask;
-  final titleController = TextEditingController();
-  final descriptionController = TextEditingController();
 
 // Deletes the tasks and shows a SnackBar
   Future<void> deleteSubTask(BuildContext context, String mySubTaskId) async {
-    final mySubTasksDB = FirebaseFirestore.instance
-        .collection('myTasks')
-        .doc(task.id)
-        .collection('mySubTasks');
-    final subTaskRef = mySubTasksDB.doc(subTask.id);
-    final subTaskSnapshot = await subTaskRef.get();
+    final myTasksDB = FirebaseFirestore.instance.collection(
+      'myTasks',
+    );
+    final message = ScaffoldMessenger.of(context);
+    final CollectionReference mySubTasksDB = myTasksDB
+        .doc(
+          task.id,
+        )
+        .collection(
+          'mySubTasks',
+        );
 
-    if (subTaskSnapshot.exists) {
-      await mySubTasksDB.doc(mySubTaskId).delete();
-    } else {
-      if (kDebugMode) {
-        print("Sub Task does not exist and can't be deleted");
-      }
-    }
+    // Store the sub task locally before deleting it from Firestore
+    final DocumentSnapshot<Object?> subTaskSnapshot =
+        await mySubTasksDB.doc(mySubTaskId).get();
+    final Object? subTaskData = subTaskSnapshot.data();
 
-    /*  final message = ScaffoldMessenger.of(context);
+    // Final delete
+    await mySubTasksDB.doc(mySubTaskId).delete();
 
     final snackBar = SnackBar(
-      duration: const Duration(seconds: 2),
-      content: const Text("Deleting Task..."),
+      duration: const Duration(seconds: 5),
+      content: const Text(
+        'Deleting Sub Task...',
+      ),
       action: SnackBarAction(
         label: 'Undo',
-        onPressed: () {},
+        onPressed: () async {
+          if (subTaskData != null) {
+            await mySubTasksDB
+                .doc(
+                  mySubTaskId,
+                )
+                .set(
+                  subTaskData,
+                );
+          }
+
+          // Show a new snackbar to inform the user that the task has been restored
+          message.showSnackBar(
+            const SnackBar(
+              duration: Duration(
+                seconds: 2,
+              ),
+              content: Text(
+                'Sub Task Restored',
+              ),
+            ),
+          );
+        },
       ),
     );
-    message.showSnackBar(snackBar); */
+    message.showSnackBar(snackBar);
   }
 
   @override
@@ -59,11 +80,15 @@ class SlideActionWidgetSubTask extends HookWidget {
 // Edit the tasks
     Future<void> editSubTask(BuildContext context, SubTask subTask) async {
       await showModalBottomSheet(
-          isScrollControlled: true,
-          context: context,
-          builder: (BuildContext context) {
-            return UpdateSubTaskBottomSheet(task: task, subTask: subTask);
-          });
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext context) {
+          return UpdateSubTaskBottomSheet(
+            task: task,
+            subTask: subTask,
+          );
+        },
+      );
     }
 
     return ClipRRect(
@@ -75,7 +100,10 @@ class SlideActionWidgetSubTask extends HookWidget {
           children: [
             //EDIT Todo Item
             SlidableAction(
-              onPressed: ((context) => editSubTask(context, subTask)),
+              onPressed: ((context) => editSubTask(
+                    context,
+                    subTask,
+                  )),
               icon: Icons.edit,
               foregroundColor: Colors.white,
               backgroundColor: Colors.green,
@@ -83,7 +111,10 @@ class SlideActionWidgetSubTask extends HookWidget {
             ),
             //DELETE Todo Item
             SlidableAction(
-              onPressed: ((context) => deleteSubTask(context, subTask.id)),
+              onPressed: ((context) => deleteSubTask(
+                    context,
+                    subTask.id,
+                  )),
               icon: Icons.delete,
               foregroundColor: Colors.white,
               backgroundColor: Colors.red,

@@ -1,6 +1,5 @@
-import 'package:another_todo/provider/create_task_bottom_sheet.dart';
-import 'package:another_todo/widgets/button_add_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:another_todo/widgets/sub_task_items/button_create_task_widget.dart';
 import 'package:flutter/material.dart';
 
 /// This [EmptyDataWidget] is a widgets that gives the information about an empty page
@@ -15,26 +14,14 @@ class EmptyDataWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> createTask(BuildContext context,
-        [DocumentSnapshot? documentSnapshot]) async {
-      await showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (BuildContext context) {
-          return CreateTaskBottomSheet();
-        },
-      );
-    }
-
     return Padding(
       padding: const EdgeInsets.only(top: 15, bottom: 20, left: 10, right: 10),
       child: Stack(alignment: AlignmentDirectional.topStart, children: [
         Center(
           child: Text(infoText),
         ),
-        ButtonAddWidget(
+        const ButtonCreateTaskWidget(
           infoText: 'New Task',
-          function: (() => createTask(context)),
         ),
       ]),
     );

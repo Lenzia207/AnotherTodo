@@ -1,19 +1,29 @@
+import 'package:another_todo/model/task.dart';
+import 'package:another_todo/widgets/task_items/create_task_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
-/// This [ButtonAddWidget] is a button widgets that is placed at the bottom right.
+/// This [ButtonCreateTaskWidget] is a button widgets that is placed at the bottom right.
 /// An info text to the button and function can be added
-class ButtonAddWidget extends StatelessWidget {
-  const ButtonAddWidget({
+class ButtonCreateTaskWidget extends StatelessWidget {
+  const ButtonCreateTaskWidget({
     Key? key,
     required this.infoText,
-    required this.function,
   }) : super(key: key);
 
   final String infoText;
-  final Function() function;
 
   @override
   Widget build(BuildContext context) {
+    Future<void> createTask(BuildContext context, [Task? task]) async {
+      await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext context) {
+          return CreateTaskBottomSheet();
+        },
+      );
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -21,7 +31,7 @@ class ButtonAddWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FloatingActionButton.extended(
-              onPressed: function,
+              onPressed: (() => createTask(context)),
               backgroundColor: Colors.green,
               label: Text(infoText),
               icon: const Icon(Icons.add),

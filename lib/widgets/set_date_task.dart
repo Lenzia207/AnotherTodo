@@ -1,22 +1,25 @@
+import 'package:another_todo/model/task.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class SetDateTask extends HookWidget {
-  const SetDateTask({
+  SetDateTask({
     Key? key,
-  }) : super(key: key);
+    required this.task,
+  }) : super(
+          key: key,
+        );
+
+  Task task;
 
   @override
   Widget build(BuildContext context) {
     final dataRange = useState(
       DateTimeRange(
-        start: DateTime.now(),
-        end: DateTime.now().add(
-          const Duration(
-            days: 7,
-          ),
-        ),
+        start: task.start.toDate(),
+        end: task.end.toDate(),
       ),
     );
 
@@ -27,8 +30,19 @@ class SetDateTask extends HookWidget {
         firstDate: DateTime(1950),
         lastDate: DateTime(2050),
       );
+      if (newDateRange != null) {
+        // Store the new DateTimeRange in Firestore
+        final myTaskId = FirebaseFirestore.instance.collection('myTasks').doc(
+              task.id,
+            );
 
-      dataRange.value = newDateRange ?? dataRange.value;
+        await myTaskId.update({
+          'start': newDateRange.start,
+          'end': newDateRange.end,
+        });
+
+        dataRange.value = newDateRange;
+      }
     }
 
     final start = formatDate(dataRange.value.start, [

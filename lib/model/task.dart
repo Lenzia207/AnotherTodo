@@ -8,6 +8,8 @@ class Task {
   bool isDone;
   bool isPrivate;
   List<SubTask>? subTasks;
+  Timestamp start;
+  Timestamp end;
 
   //Constructor
   Task({
@@ -17,6 +19,8 @@ class Task {
     this.isDone = false,
     this.isPrivate = false,
     this.subTasks,
+    required this.start,
+    required this.end,
   });
 
   Task.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -25,5 +29,7 @@ class Task {
         description = snapshot['description'],
         isDone = snapshot['isDone'] as bool,
         isPrivate = snapshot['isPrivate'] as bool,
+        start = snapshot['start'],
+        end = snapshot['end'],
         subTasks = [];
 }
