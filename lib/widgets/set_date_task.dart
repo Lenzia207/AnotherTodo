@@ -16,6 +16,7 @@ class SetDateTask extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    // get Timestamp from task and convert to type DateTime
     final dataRange = useState(
       DateTimeRange(
         start: task.start.toDate(),
@@ -31,8 +32,12 @@ class SetDateTask extends HookWidget {
         lastDate: DateTime(2050),
       );
       if (newDateRange != null) {
-        // Store the new DateTimeRange in Firestore
-        final myTaskId = FirebaseFirestore.instance.collection('myTasks').doc(
+        // Get the taskId and update the new DateTimeRange in Firestore
+        final myTaskId = FirebaseFirestore.instance
+            .collection(
+              'myTasks',
+            )
+            .doc(
               task.id,
             );
 
@@ -45,21 +50,21 @@ class SetDateTask extends HookWidget {
       }
     }
 
-    final start = formatDate(dataRange.value.start, [
-      dd,
-      '.',
-      mm,
-      ' ',
-      yyyy,
-    ]);
-    final end = formatDate(dataRange.value.end, [
-      dd,
-      '.',
-      mm,
-      ' ',
-      yyyy,
-    ]);
+    final start = formatDate(dataRange.value.start, [dd, '.', mm, ' ', yyyy]);
+    final end = formatDate(dataRange.value.end, [dd, '.', mm, ' ', yyyy]);
     final duration = dataRange.value.duration;
+
+    // the color changes depending how much days are left
+    Color getColor(duration) {
+      if (duration <= 1) return Colors.red;
+      if (duration <= 3) return Colors.orange;
+      return Colors.green;
+    }
+
+    String getText(date) {
+      if (date == 1) return 'Time left: ${duration.inDays} Day';
+      return 'Time left: ${duration.inDays} Days';
+    }
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -69,6 +74,7 @@ class SetDateTask extends HookWidget {
         right: 30,
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -78,23 +84,37 @@ class SetDateTask extends HookWidget {
               color: Colors.blue,
             ),
           ),
+          const SizedBox(
+            height: 10,
+          ),
           Text(
-            "Deadline is: $end",
+            "Deadline: $end",
             style: const TextStyle(
               fontSize: 24,
               color: Colors.blue,
             ),
           ),
-          Text("Duration: ${duration.inDays} Day(s)"),
           const SizedBox(
-            height: 10,
+            height: 40,
+          ),
+          Text(
+            getText(duration.inDays),
+            style: TextStyle(
+              fontSize: 24,
+              color: getColor(duration.inDays),
+            ),
+          ),
+          const SizedBox(
+            height: 30,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton.icon(
                 onPressed: () => pickDateRanger(context),
-                icon: const Icon(Icons.date_range),
+                icon: const Icon(
+                  Icons.date_range,
+                ),
                 label: const Text(
                   "Set Date",
                 ),
