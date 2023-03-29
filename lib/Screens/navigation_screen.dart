@@ -9,8 +9,8 @@ class MainNavigationScreen extends HookWidget {
   MainNavigationScreen({super.key});
 
   final pages = [
-    OpenTasksScreen(),
-    CompletedTasksScreen(),
+    const OpenTasksScreen(),
+    const CompletedTasksScreen(),
     const PassCodePrivatePage(),
   ];
 
