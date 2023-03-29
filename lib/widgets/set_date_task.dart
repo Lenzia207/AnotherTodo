@@ -4,15 +4,17 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/// This sets a date range by default and can be edited.
+/// The color of the duration changes when the number / days gets lower
 class SetDateTask extends HookWidget {
-  SetDateTask({
+  const SetDateTask({
     Key? key,
     required this.task,
   }) : super(
           key: key,
         );
 
-  Task task;
+  final Task task;
 
   @override
   Widget build(BuildContext context) {

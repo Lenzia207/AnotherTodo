@@ -1,4 +1,4 @@
-import 'package:another_todo/model/subTask.dart';
+import 'package:another_todo/model/sub_task.dart';
 import 'package:another_todo/model/task.dart';
 import 'package:another_todo/widgets/sub_task_items/sub_todo_item_widget.dart';
 import 'package:another_todo/widgets/sub_task_items/update_sub_task_bottom_sheet.dart';

@@ -1,6 +1,7 @@
-import 'package:another_todo/model/subTask.dart';
+import 'package:another_todo/model/sub_task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Model for the main Task
 class Task {
   String id;
   String title;

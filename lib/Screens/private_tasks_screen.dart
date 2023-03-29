@@ -1,7 +1,7 @@
-import 'package:another_todo/Screens/navigation_screen.dart';
+import 'package:another_todo/screens/navigation_screen.dart';
 import 'package:another_todo/model/task.dart';
-import 'package:another_todo/widgets/sub_task_items/button_create_task_widget.dart';
 import 'package:another_todo/widgets/empty_data_widget.dart';
+import 'package:another_todo/widgets/task_items/button_create_task_widget.dart';
 import 'package:another_todo/widgets/task_items/slide_action_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

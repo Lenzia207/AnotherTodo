@@ -1,7 +1,8 @@
-import 'package:another_todo/Screens/private_tasks_screen.dart';
+import 'package:another_todo/screens/private_tasks_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lock_screen/flutter_lock_screen.dart';
 
+/// The [PassCodePrivatePage] page represents the authentication layer before entering the [PrivateTasksScreen]
 class PassCodePrivatePage extends StatelessWidget {
   const PassCodePrivatePage({super.key});
 

@@ -1,4 +1,4 @@
-import 'package:another_todo/model/subTask.dart';
+import 'package:another_todo/model/sub_task.dart';
 import 'package:another_todo/model/task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -24,16 +24,10 @@ class SubTodoItemWidget extends HookWidget {
           .doc(task.id)
           .collection('mySubTasks');
       final subTaskRef = mySubTasksDB.doc(subTask.id);
-      final subTaskSnapshot = await subTaskRef.get();
-      if (subTaskSnapshot.exists) {
-        await subTaskRef.update({
-          'isDone': isDone,
-        });
-      } else {
-        if (kDebugMode) {
-          print('Sub Task does not exist');
-        }
-      }
+
+      await subTaskRef.update({
+        'isDone': isDone,
+      });
     }
 
     return Container(

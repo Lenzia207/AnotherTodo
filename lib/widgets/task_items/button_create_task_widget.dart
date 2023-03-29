@@ -2,7 +2,7 @@ import 'package:another_todo/model/task.dart';
 import 'package:another_todo/widgets/task_items/create_task_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
-/// This [ButtonCreateTaskWidget] is a button widgets that is placed at the bottom right.
+/// This [ButtonCreateTaskWidget] is a button widgets that is placed at the bottom right and will create new [Task].
 /// An info text to the button and function can be added
 class ButtonCreateTaskWidget extends StatelessWidget {
   const ButtonCreateTaskWidget({

@@ -1,10 +1,10 @@
-import 'package:another_todo/model/subTask.dart';
+import 'package:another_todo/model/sub_task.dart';
 import 'package:another_todo/model/task.dart';
 import 'package:another_todo/widgets/sub_task_items/create_sub_task_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
-/// This [ButtonCreateSubTaskWidget] is a button widgets that is placed at the bottom right.
-/// An info text to the button and function can be added
+/// This [ButtonCreateSubTaskWidget] is a button widgets that is placed at the bottom right and will create new [SubTask].
+/// An info text to the button and function can be added.
 class ButtonCreateSubTaskWidget extends StatelessWidget {
   const ButtonCreateSubTaskWidget({
     Key? key,

@@ -3,6 +3,8 @@
         "Cupertino",
         "firestore",
         "Opps",
-        "Passcode"
+        "Passcode",
+        "Reorderable",
+        "spsc"
     ]
 }

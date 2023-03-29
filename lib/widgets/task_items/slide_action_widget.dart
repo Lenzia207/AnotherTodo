@@ -1,13 +1,14 @@
-import 'package:another_todo/model/subTask.dart';
-import 'package:another_todo/model/task.dart';
-import 'package:another_todo/widgets/task_items/update_task_bottom_sheet.dart';
+import 'package:another_todo/model/sub_task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:another_todo/model/task.dart';
+import 'package:another_todo/widgets/task_items/update_task_bottom_sheet.dart';
+
 import 'task_item_widget.dart';
 
-/// The [SlideActionWidget] is part of the [TodoItemWidget] and features Sliding inside the Todo-Item
+/// The [SlideActionWidget] is part of the [TaskItemWidget] and features Sliding inside the Todo-Item
 class SlideActionWidget extends HookWidget {
   SlideActionWidget({
     Key? key,

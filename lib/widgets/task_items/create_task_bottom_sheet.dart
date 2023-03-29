@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/// This will create and save the given data as [Task] to Firestore
 class CreateTaskBottomSheet extends HookWidget {
   CreateTaskBottomSheet({
     Key? key,
@@ -10,8 +11,9 @@ class CreateTaskBottomSheet extends HookWidget {
   }) : super(key: key);
 
   final Task? task;
-  final CollectionReference myTasksDB =
-      FirebaseFirestore.instance.collection('myTasks');
+  final CollectionReference myTasksDB = FirebaseFirestore.instance.collection(
+    'myTasks',
+  );
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 

@@ -3,6 +3,7 @@ import 'package:another_todo/widgets/task_items/slide_action_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/// This represents the data coming from Firestore in a list that is able to reorder the position of the items
 class StreamTaskList extends HookWidget {
   const StreamTaskList({
     super.key,

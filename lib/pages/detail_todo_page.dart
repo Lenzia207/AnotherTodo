@@ -1,4 +1,4 @@
-import 'package:another_todo/model/subTask.dart';
+import 'package:another_todo/model/sub_task.dart';
 import 'package:another_todo/model/task.dart';
 import 'package:another_todo/widgets/sub_task_items/button_create_sub_task_widget.dart';
 import 'package:another_todo/widgets/sub_task_items/empty_sub_tasks_widget.dart';
@@ -9,6 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/// The [DetailTodoPage] represents the main task and can also display created sub tasks.
+/// Additionally the DateTimePicker manages to set dates and date ranges.
 class DetailTodoPage extends HookWidget {
   DetailTodoPage({
     Key? key,
@@ -23,7 +25,7 @@ class DetailTodoPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // gets the sub task in the task.id and maps in the task snapshot through the subTask-List
+    // Gets the sub task in the task.id and maps in the task snapshot through the subTask-List
     Stream<List<SubTask>> useSubTaskStream(Task myTask) {
       return useMemoized(() {
         return FirebaseFirestore.instance

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+/// This represents information of the main task as a card.
 class DetailHeaderTodoCard extends HookWidget {
   const DetailHeaderTodoCard({
     Key? key,
@@ -15,7 +16,9 @@ class DetailHeaderTodoCard extends HookWidget {
     // updates the value isPrivate
     void updateIsPrivate(String id, bool isPrivate) async {
       final nav = Navigator.pop(context);
-      final myTasksDB = FirebaseFirestore.instance.collection('myTasks');
+      final myTasksDB = FirebaseFirestore.instance.collection(
+        'myTasks',
+      );
       await myTasksDB.doc(id).update({
         'isPrivate': isPrivate,
       });

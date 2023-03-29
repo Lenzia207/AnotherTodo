@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Model for the subTask connected to the main Task id
 class SubTask {
   String id;
   String title;
