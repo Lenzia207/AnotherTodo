@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-/// This is the general representation of the [OpenTasksScreen]
+/// This is the general representation of the [CompletedTasksScreen]
 class CompletedTasksScreen extends HookWidget {
   const CompletedTasksScreen({super.key});
 
@@ -49,7 +49,7 @@ class CompletedTasksScreen extends HookWidget {
                     tasks: tasks,
                   ),
 
-                  // Button widget to create a new task
+                  // create a new task
                   const ButtonCreateTaskWidget(
                     infoText: 'New Task',
                   ),

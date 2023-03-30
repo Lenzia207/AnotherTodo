@@ -16,10 +16,10 @@ class PrivateTasksScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tasksStream = useMemoized(() => FirebaseFirestore.instance
+    final tasksStream = FirebaseFirestore.instance
         .collection('myTasks')
         .where("isPrivate", isEqualTo: true)
-        .snapshots());
+        .snapshots();
 
     return Scaffold(
       appBar: AppBar(
