@@ -58,19 +58,26 @@ class SetDateTask extends HookWidget {
 
     final start = formatDate(dataRange.value.start, [dd, '.', mm, ' ', yyyy]);
     final end = formatDate(dataRange.value.end, [dd, '.', mm, ' ', yyyy]);
-    final duration = dataRange.value.duration;
+
+    // calculate the remaining time between the current day and the end date
+    // add Duration -1 to have the last day of a deadline displayed as 1 and not 0
+    final remainingTime = dataRange.value.end.difference(DateTime.now().add(
+      const Duration(
+        days: -1,
+      ),
+    ));
+    final remainingDays = remainingTime.inDays;
+    // Get the right Text distinguishing between day and days
+    final remainingText = remainingDays == 1
+        ? 'Time left: 1 Day'
+        : 'Time left: $remainingDays Days';
 
     // the color changes depending how much days are left
-    Color getColor(duration) {
-      if (duration <= 1) return Colors.red;
-      if (duration <= 3) return Colors.orange;
-      return Colors.green;
-    }
-
-    String getText(date) {
-      if (date == 1) return 'Time left: ${duration.inDays} Day';
-      return 'Time left: ${duration.inDays} Days';
-    }
+    final remainingDaysColor = remainingDays <= 1
+        ? Colors.red
+        : remainingDays <= 3
+            ? Colors.orange
+            : Colors.green;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -104,10 +111,11 @@ class SetDateTask extends HookWidget {
             height: 40,
           ),
           Text(
-            getText(duration.inDays),
+            remainingText,
             style: TextStyle(
               fontSize: 24,
-              color: getColor(duration.inDays),
+              color: remainingDaysColor,
+              fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(
@@ -116,13 +124,15 @@ class SetDateTask extends HookWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ElevatedButton.icon(
-                onPressed: () => pickDateRanger(context),
-                icon: const Icon(
-                  Icons.date_range,
-                ),
-                label: const Text(
-                  "Set Date",
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () => pickDateRanger(context),
+                  icon: const Icon(
+                    Icons.date_range,
+                  ),
+                  label: const Text(
+                    "Set Date",
+                  ),
                 ),
               ),
             ],

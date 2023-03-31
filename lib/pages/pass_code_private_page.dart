@@ -36,11 +36,28 @@ class PassCodePrivatePage extends StatelessWidget {
           return SingleChildScrollView(
             child: Column(
               children: [
-                ElevatedButton.icon(
-                  onPressed: () => changePasscode(context),
-                  icon: const Icon(Icons.edit_attributes),
-                  label: const Text(
-                    "Change Passcode",
+                Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () => changePasscode(context),
+                          icon: const Icon(
+                            Icons.edit,
+                          ),
+                          label: const Text(
+                            "Change Code",
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                              Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(

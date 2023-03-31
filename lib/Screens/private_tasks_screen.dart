@@ -68,18 +68,27 @@ class PrivateTasksScreen extends HookWidget {
                   alignment: AlignmentDirectional.topStart,
                   children: [
                     SingleChildScrollView(
-                      child: ListView.separated(
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        separatorBuilder: (context, index) => Container(
-                          height: 5,
-                        ),
-                        itemCount: tasks.length,
-                        itemBuilder: (context, index) {
-                          final Task task = tasks[index];
+                      child: Column(
+                        children: [
+                          ListView.separated(
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            separatorBuilder: (context, index) => Container(
+                              height: 5,
+                            ),
+                            itemCount: tasks.length,
+                            itemBuilder: (context, index) {
+                              final Task task = tasks[index];
 
-                          return SlideActionWidget(task: task);
-                        },
+                              return SlideActionWidget(
+                                task: task,
+                              );
+                            },
+                          ),
+                          const SizedBox(
+                            height: 70,
+                          ),
+                        ],
                       ),
                     ),
                     const ButtonCreateTaskWidget(
