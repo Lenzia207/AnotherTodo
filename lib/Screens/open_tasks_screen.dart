@@ -49,7 +49,9 @@ class OpenTasksScreen extends HookWidget {
               child: Stack(
                 alignment: AlignmentDirectional.topStart,
                 children: [
-                  StreamTaskList(tasks: tasks),
+                  StreamTaskList(
+                    tasks: tasks,
+                  ),
                   const ButtonCreateTaskWidget(
                     infoText: 'New Task',
                   ),

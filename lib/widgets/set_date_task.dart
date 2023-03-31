@@ -21,8 +21,12 @@ class SetDateTask extends HookWidget {
     // get Timestamp from task and convert to type DateTime
     final dataRange = useState(
       DateTimeRange(
-        start: task.start.toDate(),
-        end: task.end.toDate(),
+        start: task.start!.toDate(),
+        end: task.end!.toDate().add(
+              const Duration(
+                days: 7,
+              ),
+            ),
       ),
     );
 

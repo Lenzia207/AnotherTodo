@@ -14,23 +14,30 @@ class StreamTaskList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final task = useState<List<Task>>(tasks);
-    return ReorderableListView.builder(
-      physics: const BouncingScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: task.value.length,
-      onReorder: ((oldIndex, newIndex) {
-        if (newIndex > oldIndex) newIndex--;
-        task.value.insert(
-          newIndex,
-          task.value.removeAt(oldIndex),
-        );
-      }),
-      itemBuilder: (context, index) {
-        final task = tasks[index];
-        return SlideActionWidget(
-          key: ValueKey(task.id),
-          task: task,
+    return StatefulBuilder(
+      builder: (context, setState) {
+        // When tap & hold item, items can be reordered in the list
+        return ReorderableListView.builder(
+          physics: const BouncingScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: tasks.length,
+          onReorder: ((oldIndex, newIndex) {
+            setState(
+              () {
+                if (newIndex > oldIndex) newIndex--;
+
+                final task = tasks.removeAt(oldIndex);
+                tasks.insert(newIndex, task);
+              },
+            );
+          }),
+          itemBuilder: (context, index) {
+            final task = tasks[index];
+            return SlideActionWidget(
+              key: ValueKey(task.id),
+              task: task,
+            );
+          },
         );
       },
     );
