@@ -10,18 +10,18 @@ class SetDateTask extends HookWidget {
   const SetDateTask({
     Key? key,
     required this.task,
-  }) : super(
-          key: key,
-        );
+  }) : super(key: key);
 
   final Task task;
 
   @override
   Widget build(BuildContext context) {
-    print('SetDateTask build');
     // get Timestamp from task and convert to type DateTime
     final dataRange = useState(
-      DateTimeRange(start: task.start!.toDate(), end: task.end!.toDate()),
+      DateTimeRange(
+        start: task.start!.toDate(),
+        end: task.end!.toDate(),
+      ),
     );
 
     Future pickDateRanger(context) async {
@@ -50,8 +50,14 @@ class SetDateTask extends HookWidget {
       }
     }
 
-    final start = formatDate(dataRange.value.start, [dd, '.', mm, ' ', yyyy]);
-    final end = formatDate(dataRange.value.end, [dd, '.', mm, ' ', yyyy]);
+    final start = formatDate(
+      dataRange.value.start,
+      [dd, '.', mm, ' ', yyyy],
+    );
+    final end = formatDate(
+      dataRange.value.end,
+      [dd, '.', mm, ' ', yyyy],
+    );
 
     // calculate the remaining time between the current day and the end date
     // add Duration -1 to have the last day of a deadline displayed as 1 and not 0

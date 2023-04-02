@@ -38,56 +38,73 @@ class TaskItemWidget extends HookWidget {
           ),
         );
       },
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        color: Colors.white,
-        child: Card(
-          elevation: 0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 7,
+          ),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: Colors.grey,
+                  width: 5,
+                ),
+              ),
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              color: Colors.white,
+              child: Card(
+                elevation: 0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    //TITLE
-                    Text(
-                      task.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 22,
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //TITLE
+                          Text(
+                            task.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 22,
+                            ),
+                          ),
+
+                          //If there is a DESCRIPTION
+                          if (task.description != null)
+                            Text(
+                              task.description,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                height: 1.5,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
-
-                    //If there is a DESCRIPTION
-                    if (task.description != null)
-                      Text(
-                        task.description,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          height: 1.5,
-                        ),
-                      ),
+                    Checkbox(
+                      activeColor: Theme.of(context).primaryColor,
+                      checkColor: Colors.white,
+                      value: task.isDone,
+                      onChanged: (value) {
+                        final bool newValue = !task.isDone;
+                        updateIsDone(task.id, newValue);
+                      },
+                    ),
                   ],
                 ),
               ),
-              Checkbox(
-                activeColor: Theme.of(context).primaryColor,
-                checkColor: Colors.white,
-                value: task.isDone,
-                onChanged: (value) {
-                  final bool newValue = !task.isDone;
-                  updateIsDone(task.id, newValue);
-                },
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

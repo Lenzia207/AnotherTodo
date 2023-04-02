@@ -19,9 +19,17 @@ class MainNavigationScreen extends HookWidget {
     final selectedIndex = useState(0);
     return Scaffold(
       appBar: AppBar(
+        elevation: 14,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(70),
+            bottomLeft: Radius.circular(70),
+          ),
+        ),
         title: const Text(
           'Another Todo',
         ),
+        centerTitle: true,
       ),
       body: pages[selectedIndex.value],
       bottomNavigationBar: BottomNavigationBar(
